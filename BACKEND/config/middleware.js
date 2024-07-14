@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const User = require('../models/userModel');
+const User = require('../models/penggunaModel');
 const multer = require('multer');
 const path = require('path');
 
@@ -21,6 +21,23 @@ const verify = async (req, res, next) => {
 };
 
 
+const verifySuperAdmin = async (req, res, next) => {
+  try {
+    const token = req.header('Authorization').replace('Bearer ', '');
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN);
+    const user = await User.findOne({
+      _id: decoded._id,
+      'tokens.token': token,
+    });
+    if (!user || user.level !== 'super-admin') throw new Error();
+    req.token = token;
+    req.user = user;
+    next();
+  } catch (e) {
+    res.status(401).send({ error: 'Silakan login terlebih dahulu.' });
+  }
+};
+
 const verifyOwner = async (req, res, next) => {
     try {
       const token = req.header('Authorization').replace('Bearer ', '');
@@ -29,7 +46,7 @@ const verifyOwner = async (req, res, next) => {
         _id: decoded._id,
         'tokens.token': token,
       });
-      if (!user || user.role !== 'owner') throw new Error();
+      if (!user || user.level !== 'owner') throw new Error();
       req.token = token;
       req.user = user;
       next();
@@ -46,7 +63,7 @@ const verifyOwner = async (req, res, next) => {
         _id: decoded._id,
         'tokens.token': token,
       });
-      if (!user || user.role !== 'admin') throw new Error();
+      if (!user || user.level !== 'admin') throw new Error();
       req.token = token;
       req.user = user;
       next();
@@ -71,4 +88,4 @@ const upload = multer({
   storage: storage,
 }).single('photo');
   
-module.exports = { verify, verifyOwner, verifyAdmin, upload };
+module.exports = { verify, verifySuperAdmin, verifyOwner, verifyAdmin, upload };

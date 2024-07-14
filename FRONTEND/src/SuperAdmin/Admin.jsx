@@ -7,7 +7,6 @@ import { useState } from "react";
 import { Dialog } from 'primereact/dialog';
 import { Dropdown } from 'primereact/dropdown';
 import { Toolbar } from 'primereact/toolbar';
-import PhotoProfile from './../assets/img/foto-ilham.jpg';
 import { addAdmin, admins, deletAdmin, editDataAdmin } from "../services/user.service";
 
 const Admin = () => {
@@ -19,7 +18,6 @@ const Admin = () => {
     const [newAdmin, setNewAdmin] = useState();
     const [editAdmin, setEditAdmin] = useState();
     const [selectedAdmin, setSelectedAdmin] = useState([]);
-    const [viewDetail, setViewdetail] = useState(false)
     const [globalFilter, setGlobalFilter] = useState('');
     const [dataAdmin, setDataAdmin] = useState([]);
     const [adminToEdit, setAdminToEdit] = useState();
@@ -95,7 +93,7 @@ const Admin = () => {
             console.log('Submitting data:', updatedAdminData);
             const success = await editDataAdmin(adminToEdit._id, updatedAdminData);
             if (success) {
-              setNewAdmin(false);
+              setEditAdmin(false);
               alert('Data admin berhasil diperbarui!');
             } else {
               alert('Data admin gagal diperbarui!');
@@ -110,16 +108,6 @@ const Admin = () => {
     const bodyAction = (rowData) =>{
         return(
             <div className="flex flex-row">
-                <Button label="" icon="pi pi-external-link" className="p-button-warning h-8" 
-                onClick={()=>{
-                    setViewdetail(true)
-                    setAdminToEdit(rowData);
-                    setNama(rowData.nama);
-                    setUsername(rowData.username);
-                    setEmail(rowData.email);
-                    setJabatan(rowData.jabatan);
-                    }
-                }></Button>
                 <div className="flex w-fulll">
                     <button type="submit" label="edit profil" className="text-xs p-2 border border-cyan-600 w-24 rounded-xl ml-2 text-cyan-600 justify-center font-normal hover:bg-cyan-800 hover:text-slate-50" 
                     onClick={()=>
@@ -227,47 +215,6 @@ const Admin = () => {
                             </form>
                         </Dialog>
                 </div>
-
-
-                <Dialog header="Detail Profile" visible={viewDetail} style={{ width: '50vw' }} onHide={() => {if (!viewDetail) return; setViewdetail(false); }}>
-                                <div className="grid grid-flow-row justify-center">
-                                    <div className="border border-slate-400 rounded-lg" style={{width:"40vw"}}>
-                                    <div className='flex w-96 mx-20 mt-4 rounded-md justify-center'>
-                                        <img
-                                        style={{
-                                            width: '180px',
-                                            height: '180px',
-                                            objectFit: 'cover',
-                                            borderRadius: '50%',
-                                            border: '3px solid black',
-                                        }}
-                                            src={PhotoProfile} 
-                                            alt="Foto profile"
-                                        />
-                                    </div>
-                                        <div className="flex flex-row">
-                                            <div className="flex-none w-1/6"></div>
-                                            <div className="flex w-4/6">
-                                            <div className='flex flex-col w-full mt-4 justify-center'>
-                                                <div className="flex w-full justify-center border-b-2">
-                                                    <span className='font-bold font-sans text-md m-2'>Nama : {nama}</span>
-                                                </div>
-                                                <div className="flex w-full justify-center border-b-2">
-                                                    <span className='font-bold font-sans text-md m-2'>Username : {username}</span>
-                                                </div>
-                                                <div className="flex w-full justify-center border-b-2">
-                                                    <span className='font-bold font-sans text-md m-2'>Email : {email}</span>
-                                                </div>
-                                                <div className="flex w-full justify-center border-b-2">
-                                                    <span className='font-bold font-sans text-md m-2'>Jabatan : {jabatan}</span>
-                                                </div>
-                                                </div>
-                                            </div>
-                                            <div className="flex-none w-1/6"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                </Dialog>
             </div>
         );
     }

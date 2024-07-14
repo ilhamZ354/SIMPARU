@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const User = require('../models/userModel');
+const User = require('../models/penggunaModel');
 const { upload } = require('../config/middleware'); // pastikan middleware upload sudah di-import
 
 const updateProfilePhoto = async (req, res) => {

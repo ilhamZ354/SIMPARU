@@ -1,21 +1,25 @@
 const { login, 
     logout, 
     regisAdmin, 
-    getUsers, 
     getAdmins, 
-    getAllUser,
     getProfile,
     getAdminById,
     editAdminById,
     deleteAdminById,
     deleteAllAdmin,
     editPassword, 
-    regisUser,
-    getUserById,
-    editUserById,
     deleteUserById,
-    deleteAllUser,
-    getImage
+    regisKepsek,
+    regisSuperAdmin,
+    getKepsek,
+    deleteKepsek,
+    regisGuru,
+    getGurus,
+    getGuruById,
+    editGuruById,
+    deleteGuruById,
+    deleteAllGuru,
+    editKepsek
 } = require ('../controllers/userController');
 
 const {
@@ -28,7 +32,7 @@ const {
 
 const multer = require('multer')
 
-const { verify, verifyOwner, verifyAdmin } = require('./middleware');
+const { verify, verifyOwner, verifyAdmin, verifySuperAdmin } = require('./middleware');
 const { excelUpload } = require('../controllers/uploadFileExcel');
 const { updateProfilePhoto, hapusPhoto } = require('../controllers/uploadPhotoController')
 const { upload } = require('../config/middleware')
@@ -40,25 +44,29 @@ module.exports = (app) => {
     //semua user
     app.post(`${BASE_URL}/login`, login );
     app.post(`${BASE_URL}/logout`,logout );
-    app.get(`${BASE_URL}/users`, verify, getUsers );
     app.get(`${BASE_URL}/user/me`, verify, getProfile );
     app.patch(`${BASE_URL}/password/me`, verify, editPassword );
     
-    //hanya owner
-    app.post(`${BASE_URL}/admin/regis`, verifyOwner, regisAdmin );
-    app.get(`${BASE_URL}/admins`, getAdmins );
-    app.get(`${BASE_URL}/admin/:id`,verifyOwner, getAdminById );
-    app.patch(`${BASE_URL}/admin/edit/:id`,verifyOwner, editAdminById );
-    app.delete(`${BASE_URL}/admin/hapus/:id`,verifyOwner, deleteAdminById );
-    app.delete(`${BASE_URL}/admin/hapus`,verifyOwner, deleteAllAdmin );
+    //hanya super admin
+    // app.post(`${BASE_URL}/super-admin/regis`, regisSuperAdmin)
+    app.post(`${BASE_URL}/kepsek/regis`, verifySuperAdmin, regisKepsek );
+    app.get(`${BASE_URL}/kepsek`, verifySuperAdmin, getKepsek );
+    app.delete(`${BASE_URL}/kepsek/hapus`, verifySuperAdmin, deleteKepsek );
+    app.patch(`${BASE_URL}/kepsek/edit/:id`,verifySuperAdmin, editKepsek );
 
-    //hanya admin
-    app.post(`${BASE_URL}/user/regis`, verifyAdmin, regisUser );
-    app.get(`${BASE_URL}/user`, verifyAdmin, getAllUser );
-    app.get(`${BASE_URL}/user/:id`,verifyAdmin, getUserById );
-    app.patch(`${BASE_URL}/user/edit/:id`,verifyAdmin, editUserById );
-    app.delete(`${BASE_URL}/user/hapus/:id`,verifyAdmin, deleteUserById );
-    app.delete(`${BASE_URL}/user/hapus`,verifyAdmin, deleteAllUser );
+    app.post(`${BASE_URL}/admin/regis`, verifySuperAdmin, regisAdmin );
+    app.get(`${BASE_URL}/admins`, verifySuperAdmin, getAdmins );
+    app.get(`${BASE_URL}/admin/:id`,verifySuperAdmin, getAdminById );
+    app.patch(`${BASE_URL}/admin/edit/:id`,verifySuperAdmin, editAdminById );
+    app.delete(`${BASE_URL}/admin/hapus/:id`,verifySuperAdmin, deleteAdminById );
+    app.delete(`${BASE_URL}/admin/hapus`,verifySuperAdmin, deleteAllAdmin );
+
+    app.post(`${BASE_URL}/guru/regis`, verifySuperAdmin, regisGuru );
+    app.get(`${BASE_URL}/guru`, verifySuperAdmin, getGurus );
+    app.get(`${BASE_URL}/guru/:id`,verifySuperAdmin, getGuruById );
+    app.patch(`${BASE_URL}/guru/edit/:id`,verifySuperAdmin, editGuruById );
+    app.delete(`${BASE_URL}/guru/hapus/:id`,verifySuperAdmin, deleteGuruById );
+    app.delete(`${BASE_URL}/guru/hapus`,verifySuperAdmin, deleteAllGuru );
 
     //manage siswa
     app.post(`${BASE_URL}/siswa/add`, verifyAdmin, inputSiswa)

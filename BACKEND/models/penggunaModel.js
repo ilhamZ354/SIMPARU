@@ -45,10 +45,6 @@ const penggunaSchema = new Schema({
           },
         },
     ],
-    last_login: {
-        type: Date,
-        default: Date.now,
-    },
     },
     {
         timestamps: true,

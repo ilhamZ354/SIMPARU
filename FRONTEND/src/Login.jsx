@@ -33,13 +33,13 @@ const Login = () => {
 
     useEffect(() => {
         if(user && user.status==true){
-            if(user.user.role=='owner'){
+            if(user.user.level=='owner'){
                 alert('login berhasil, selamat datang kepala sekolah')
                 navigateTo('/owner/dashboard')
-            }else if(user.user.role=='admin'){
+            }else if(user.user.level=='admin'){
                 alert('login berhasil, selamat datang admin')
                 navigateTo('/admin/dashboard')
-            }else if(user.user.role=='super-admin'){
+            }else if(user.user.level=='super-admin'){
                 alert('login berhasil, selamat datang super admin')
                 navigateTo('/super-admin/dashboard')
             }else{

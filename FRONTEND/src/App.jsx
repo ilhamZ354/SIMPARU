@@ -2,7 +2,6 @@ import {BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Login from "./Login";
 import Pages from './components/Page';
 import DashboardAdmin from './Admin/Dashboard';
-import User from './Admin/User';
 import Baru from './Admin/Baru';
 import Siswa from './Admin/Siswa';
 import Sekolah from './Admin/Sekolah';
@@ -29,7 +28,6 @@ import 'primereact/resources/themes/lara-light-indigo/theme.css';
 
 function App() {
   const dashboardAdmin = <DashboardAdmin />
-  const user = <User/>
   const siswabaru = <Baru/>
   const siswa = <Siswa/>
   const sekolah = <Sekolah/>
@@ -64,7 +62,7 @@ function App() {
 
         {/* admin */}
         <Route path="/admin/dashboard" element={<Pages title="admin" active='dashboard' page={dashboardAdmin} />} />
-        <Route path="/admin/user" element={<Pages active="user" title="admin" page={user} />} />
+        <Route path="/admin/user" element={<Pages active="user" title="admin" page={''} />} />
         <Route path="/admin/siswa-baru" element={<Pages active="baru" title="admin" page={siswabaru} />} />
         <Route path="/admin/siswa" element={<Pages active="siswa" title="admin" page={siswa} />} />
         <Route path="/admin/geografis-siswa" element={<Pages active="geografis-siswa" title="admin" page={geografisSiswa} />} />

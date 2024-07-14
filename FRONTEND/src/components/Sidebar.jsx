@@ -216,7 +216,7 @@ import { Link } from 'react-router-dom';
                   </ListItem>
             </Link> */}
                   <Link to="/super-admin/kepsek">
-                  <ListItem className={`${(active=='siswa') ? 'bg-slate-100':'bg-white'} hover:bg-sky-50`}>
+                  <ListItem className={`${(active=='kepsek') ? 'bg-slate-100':'bg-white'} hover:bg-sky-50`}>
                     <ListItemPrefix>
                       <ChevronRightIcon  strokeWidth={3} className="h-4 w-4" />
                     </ListItemPrefix>
@@ -224,7 +224,7 @@ import { Link } from 'react-router-dom';
                   </ListItem>
                   </Link>
                   <Link to="/super-admin/admin">
-                  <ListItem className={`${(active=='geografis-siswa') ? 'bg-slate-100':'bg-white'} hover:bg-sky-50`}>
+                  <ListItem className={`${(active=='admin') ? 'bg-slate-100':'bg-white'} hover:bg-sky-50`}>
                     <ListItemPrefix>
                       <ChevronRightIcon  strokeWidth={3} className="h-4 w-4" />
                     </ListItemPrefix>
@@ -232,7 +232,7 @@ import { Link } from 'react-router-dom';
                   </ListItem>
                   </Link>
                   <Link to="/super-admin/guru">
-                  <ListItem className={`${(active=='geografis-siswa') ? 'bg-slate-100':'bg-white'} hover:bg-sky-50`}>
+                  <ListItem className={`${(active=='guru') ? 'bg-slate-100':'bg-white'} hover:bg-sky-50`}>
                     <ListItemPrefix>
                       <ChevronRightIcon  strokeWidth={3} className="h-4 w-4" />
                     </ListItemPrefix>

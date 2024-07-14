@@ -65,7 +65,7 @@ export const updatePassword = async (passwordData) => {
 
 
 /* 
-FOR OWNER
+FOR SUPER ADMIN
 */
 //add admin
 export const addAdmin = async (nama, username, email, jabatan, password) => {
@@ -159,16 +159,9 @@ export const editDataAdmin = async (_id, updatedAdminData) => {
     }
   };
 
-/* 
-FOR OWNER
-*/
 
-
-/* 
-FOR ADMIN
-*/
-//add user
-export const addUser = async (nama, username, email, jabatan, password) => {
+//add guru
+export const addGuru = async (nama, username, email, jabatan, password) => {
     const accessToken = Cookies.get('access_token');
     const requestBody = {
       nama,
@@ -179,7 +172,7 @@ export const addUser = async (nama, username, email, jabatan, password) => {
     };
   
     try {
-      const response = await axios.post(`${URL}/user/regis`, requestBody, {
+      const response = await axios.post(`${URL}/guru/regis`, requestBody, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${accessToken}`,
@@ -198,11 +191,11 @@ export const addUser = async (nama, username, email, jabatan, password) => {
     }
   };
 
-//get all user
-export const getUser = async (req, res) => {
+//get all guru
+export const getGuru = async (req, res) => {
     try {
       const accessToken = Cookies.get('access_token');
-      const response = await axios.get(`${URL}/user`, {
+      const response = await axios.get(`${URL}/guru`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${accessToken}`,
@@ -217,10 +210,10 @@ export const getUser = async (req, res) => {
   };
 
 //delete user
-export const deleteUser = async (id) => {
+export const deleteGuru = async (id) => {
     try {
         const accessToken = Cookies.get('access_token');
-        const response = await axios.delete(`${URL}/user/hapus/${id}`, {
+        const response = await axios.delete(`${URL}/guru/hapus/${id}`, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${accessToken}`,
@@ -235,12 +228,12 @@ export const deleteUser = async (id) => {
 
 
 // edit user
-export const editDataUser = async (_id, updatedUserData) => {
+export const editDataGuru = async (_id, updatedGuruData) => {
     try {
         console.log('Editing user with ID:', _id);
-        console.log('Updated user:', updatedUserData);
+        console.log('Updated user:', updatedGuruData);
         const accessToken = Cookies.get('access_token');
-        const response = await axios.patch(`${URL}/user/edit/${_id}`, updatedUserData, {
+        const response = await axios.patch(`${URL}/guru/edit/${_id}`, updatedGuruData, {
         headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
@@ -253,11 +246,11 @@ export const editDataUser = async (_id, updatedUserData) => {
         }
       return response.data;
     } catch (error) {
-      console.error('Failed to edit user data:', error);
+      console.error('Failed to edit guru data:', error);
       throw error;
     }
   };
 
 /* 
-FOR OWNER
+FOR SUPER ADMIN
 */
