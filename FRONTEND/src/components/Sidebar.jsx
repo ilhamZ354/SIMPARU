@@ -19,6 +19,7 @@ import {
   AcademicCapIcon,
   BuildingLibraryIcon,
   ChevronRightIcon,
+  UsersIcon
 } from "@heroicons/react/24/solid";
  
 import LogoSMK from '../assets/img/logo-smk-muse.png';
@@ -156,7 +157,7 @@ import { Link } from 'react-router-dom';
     );
   };
 
-  const sidebarOwner = (props) =>{
+  const sidebarSuperAdmin = (props) =>{
     const active = props.active;
     
     const [open3, setOpen3] = useState(0)
@@ -179,7 +180,7 @@ import { Link } from 'react-router-dom';
       </div>
       <List className="text-sm text-slate-600 min-w-max -ml-1">
         {/* dashboard */}
-        <Link to="/owner/dashboard">
+        <Link to="/super-admin/dashboard">
         <ListItem className={`${(active=='dashboard') ? 'bg-slate-100':'bg-white'} hover:bg-sky-50`}>
           <ListItemPrefix>
             <HomeIcon className="h-4 w-4" />
@@ -187,24 +188,15 @@ import { Link } from 'react-router-dom';
           Dashboard
         </ListItem>
         </Link>
-        {/* admin */}
-        <Link to='/owner/admin'>
-        <ListItem className={`${(active=='admin') ? 'bg-slate-100':'bg-white'} hover:bg-sky-50`}>
-          <ListItemPrefix>
-            <UserIcon className="h-4 w-4" />
-          </ListItemPrefix>
-          Admin
-        </ListItem>
-        </Link>
-        {/* Siswa */}
+        {/* Pengguna */}
         <Accordion open={open3 === 2}>
             <ListItem className="p-0" selected={open3 === 2}>
               <AccordionHeader onClick={() => handleOpen3(2)} className="border-b-1 p-3 w-full rounded-lg hover:bg-slate-100">
                 <ListItemPrefix>
-                  <AcademicCapIcon className="h-4 w-4" />
+                  <UsersIcon className="h-4 w-4" />
                 </ListItemPrefix>
                 <Typography color="blue-gray" className="mr-auto text-sm">
-                  Siswa
+                  Pengguna
                 </Typography>
                 <ChevronDownIcon
                   strokeWidth={2.5}
@@ -223,65 +215,34 @@ import { Link } from 'react-router-dom';
                     Baru
                   </ListItem>
             </Link> */}
-                  <Link to="/owner/siswa">
+                  <Link to="/super-admin/kepsek">
                   <ListItem className={`${(active=='siswa') ? 'bg-slate-100':'bg-white'} hover:bg-sky-50`}>
                     <ListItemPrefix>
                       <ChevronRightIcon  strokeWidth={3} className="h-4 w-4" />
                     </ListItemPrefix>
-                    Data siswa
+                    Kepala sekolah
                   </ListItem>
                   </Link>
-                  <Link to="/owner/geografis-siswa">
+                  <Link to="/super-admin/admin">
                   <ListItem className={`${(active=='geografis-siswa') ? 'bg-slate-100':'bg-white'} hover:bg-sky-50`}>
                     <ListItemPrefix>
                       <ChevronRightIcon  strokeWidth={3} className="h-4 w-4" />
                     </ListItemPrefix>
-                    Geografis
+                    Admin
+                  </ListItem>
+                  </Link>
+                  <Link to="/super-admin/guru">
+                  <ListItem className={`${(active=='geografis-siswa') ? 'bg-slate-100':'bg-white'} hover:bg-sky-50`}>
+                    <ListItemPrefix>
+                      <ChevronRightIcon  strokeWidth={3} className="h-4 w-4" />
+                    </ListItemPrefix>
+                    Guru
                   </ListItem>
                   </Link>
                 </List>
               </AccordionBody>
             )}
           </Accordion>
-        {/* sekolah */}
-        <Accordion open={open4 === 2}>
-          <ListItem className="p-0" selected={open4 === 2}>
-            <AccordionHeader onClick={() => handleOpen4(2)} className="border-b-1 p-3 w-full rounded-lg hover:bg-slate-100">
-              <ListItemPrefix>
-                <BuildingLibraryIcon className="h-4 w-4" />
-              </ListItemPrefix>
-              <Typography color="blue-gray" className="mr-auto text-sm">
-                Sekolah Asal
-              </Typography>
-              <ChevronDownIcon
-                strokeWidth={2.5}
-                className={`mx-auto h-4 w-4 ml-1 transition-transform ${open4 === 1 ? "rotate-180" : ""}`}
-              />
-            </AccordionHeader>
-          </ListItem>
-          {open4 === 2 && (
-            <AccordionBody className="py-1">
-              <List className="p-0 text-sm">
-              <Link to="/owner/sekolah">
-                <ListItem className={`${(active=='sekolah') ? 'bg-slate-100':'bg-white'} hover:bg-sky-50`}>
-                  <ListItemPrefix>
-                    <ChevronRightIcon  strokeWidth={3} className="h-4 w-4" />
-                  </ListItemPrefix>
-                  Data sekolah
-                </ListItem>
-                </Link>
-                <Link to="/owner/geografis-sekolah">
-                <ListItem className={`${(active=='geografis') ? 'bg-slate-100':'bg-white'} hover:bg-sky-50`}>
-                  <ListItemPrefix>
-                    <ChevronRightIcon  strokeWidth={3} className="h-4 w-4" />
-                  </ListItemPrefix>
-                  Geografis
-                </ListItem>
-                </Link>
-              </List>
-            </AccordionBody>
-          )}
-        </Accordion>
       </List>
     </Card>
     );
@@ -419,8 +380,8 @@ const Sidebar = (props) => {
         case 'admin':
             SidebarComponent = sidebarAdmin;
             break;
-        case 'owner':
-            SidebarComponent = sidebarOwner;
+        case 'super-admin':
+            SidebarComponent = sidebarSuperAdmin;
             break;
         case 'user':
           SidebarComponent = sidebarUser;

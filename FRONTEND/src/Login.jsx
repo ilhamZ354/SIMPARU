@@ -39,8 +39,11 @@ const Login = () => {
             }else if(user.user.role=='admin'){
                 alert('login berhasil, selamat datang admin')
                 navigateTo('/admin/dashboard')
+            }else if(user.user.role=='super-admin'){
+                alert('login berhasil, selamat datang super admin')
+                navigateTo('/super-admin/dashboard')
             }else{
-                alert('login berhasil, selamat datang')
+                alert('login berhasil, selamat datang guru')
                 navigateTo('/dashboard')
             }
         }else{

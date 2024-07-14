@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 
 const Schema = mongoose.Schema
 
-const userSchema = new Schema({
+const penggunaSchema = new Schema({
     nama: {
         type: String,
         required: true,
@@ -21,9 +21,9 @@ const userSchema = new Schema({
         required: true,
         unique: true
     },
-    role: {
+    level: {
         type: String,
-        default: 'owner',
+        default: 'guru',
         required: true,
     },
     jabatan: {
@@ -56,7 +56,7 @@ const userSchema = new Schema({
 );
 
 //method regis
-userSchema.statics.signup = async function(nama, username, email, jabatan, role, password) {
+penggunaSchema.statics.signup = async function(nama, username, email, jabatan, level, password) {
       // validasi
         if (!email || !password) {
             throw Error('Semua data harus di isi')
@@ -72,12 +72,12 @@ userSchema.statics.signup = async function(nama, username, email, jabatan, role,
         }
 
     hash =  await encrypt(password);
-    const user = await this.create({ nama, username, email, jabatan, role, password: hash });
+    const user = await this.create({ nama, username, email, jabatan, level, password: hash });
     return user
 }
 
 //validasi login
-userSchema.statics.login = async function (username, password){
+penggunaSchema.statics.login = async function (username, password){
     const user = await this.findOne({ username });
     if (!user) throw new Error('Failed to login');
 
@@ -89,7 +89,7 @@ userSchema.statics.login = async function (username, password){
   };
 
 // generate token
-userSchema.methods.generateToken = async function() {
+penggunaSchema.methods.generateToken = async function() {
     const token = jwt.sign({ _id: this._id.toString() }, process.env.ACCESS_TOKEN);
     this.tokens = this.tokens.concat({ token });
     await this.save();
@@ -97,4 +97,4 @@ userSchema.methods.generateToken = async function() {
   };
   
 
-module.exports = mongoose.model('User', userSchema)
+module.exports = mongoose.model('Pengguna', penggunaSchema)

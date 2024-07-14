@@ -9,7 +9,6 @@ import Sekolah from './Admin/Sekolah';
 import GeografisSekolah from './Admin/GeografisSekolah';
 import GeografisSiswa from './Admin/GeografisSiswa';
 import DashboardOwner from './Owner/DashboardOwner';
-import Admin from './Owner/Admin';
 import SiswaOwner from './Owner/SiswaOwner';
 import GeografisSiswaOwner from './Owner/GeografisSiswaOwner';
 import SekolahOwner from './Owner/SekolahOwner';
@@ -19,6 +18,10 @@ import GeografisSekolahUser from './Siswa/GeografisSekolahUser.jsx';
 import SekolahUser from './Siswa/SekolahUser.jsx';
 import SiswaUser from './Siswa/SiswaUser.jsx';
 import GeografisSiswaUser from './Siswa/GeografisSekolahUser.jsx';
+import Kepsek from './SuperAdmin/Kepsek.jsx';
+import DashboardSuperAdmin from './SuperAdmin/Dashboard.jsx';
+import Admin from './SuperAdmin/Admin';
+import Guru from './SuperAdmin/Guru.jsx';
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
@@ -33,7 +36,6 @@ function App() {
   const geografisSiswa = <GeografisSiswa/>
   const geografis = <GeografisSekolah/>
   const dashboardOwner = <DashboardOwner/>
-  const admin = <Admin/>
   const siswaOwner = <SiswaOwner/>
   const geoSiswaOwner = <GeografisSiswaOwner/>
   const sekolahOwner = <SekolahOwner/>
@@ -44,11 +46,21 @@ function App() {
   const sekolahUser = <SekolahUser/>
   const geoSekolahUser = <GeografisSekolahUser/>
 
+  const dashboardSuperAdmin = <DashboardSuperAdmin />
+  const kepsek = <Kepsek/>
+  const admin = <Admin/>
+  const guru = <Guru/>
 
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
+
+        {/* super admin */}
+        <Route path="/super-admin/dashboard" element={<Pages title="super-admin" active='dashboard' page={dashboardSuperAdmin} />} />
+        <Route path="/super-admin/kepsek" element={<Pages title="super-admin" active='kepsek' page={kepsek} />} />
+        <Route path="/super-admin/admin" element={<Pages title="super-admin" active='admin' page={admin} />} />
+        <Route path="/super-admin/guru" element={<Pages title="super-admin" active='guru' page={guru} />} />
 
         {/* admin */}
         <Route path="/admin/dashboard" element={<Pages title="admin" active='dashboard' page={dashboardAdmin} />} />

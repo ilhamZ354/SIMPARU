@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import PhotoProfile from '../../../BACKEND/uploads/images/photo-1720364853374.png';
+import PhotoProfile from '../../../BACKEND/uploads/images/profil-image2.jpg';
 import styled from "styled-components";
 import { Button } from "primereact/button";
 import { Dialog } from 'primereact/dialog';
