@@ -38,7 +38,7 @@ const verifySuperAdmin = async (req, res, next) => {
   }
 };
 
-const verifyOwner = async (req, res, next) => {
+const verifyKepsek = async (req, res, next) => {
     try {
       const token = req.header('Authorization').replace('Bearer ', '');
       const decoded = jwt.verify(token, process.env.ACCESS_TOKEN);
@@ -46,7 +46,7 @@ const verifyOwner = async (req, res, next) => {
         _id: decoded._id,
         'tokens.token': token,
       });
-      if (!user || user.level !== 'owner') throw new Error();
+      if (!user || user.level !== 'kepala-sekolah') throw new Error();
       req.token = token;
       req.user = user;
       next();
@@ -73,6 +73,23 @@ const verifyOwner = async (req, res, next) => {
   };
 
 
+  const verifyAdminKepsek = async (req, res, next) => {
+    try {
+      const token = req.header('Authorization').replace('Bearer ', '');
+      const decoded = jwt.verify(token, process.env.ACCESS_TOKEN);
+      const user = await User.findOne({
+        _id: decoded._id,
+        'tokens.token': token,
+      });
+      if (user.level !=='kepala-sekolah' && user.level !== 'admin') throw new Error();
+      req.token = token;
+      req.user = user;
+      next();
+    } catch (e) {
+      res.status(401).send({ error: 'Silakan login terlebih dahulu.' });
+    }
+  };
+
   const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'uploads/images/')
@@ -88,4 +105,4 @@ const upload = multer({
   storage: storage,
 }).single('photo');
   
-module.exports = { verify, verifySuperAdmin, verifyOwner, verifyAdmin, upload };
+module.exports = { verify, verifySuperAdmin, verifyAdminKepsek, verifyKepsek, verifyAdmin, upload };

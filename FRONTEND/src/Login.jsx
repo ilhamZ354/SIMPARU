@@ -33,7 +33,7 @@ const Login = () => {
 
     useEffect(() => {
         if(user && user.status==true){
-            if(user.user.level=='owner'){
+            if(user.user.level=='kepala-sekolah'){
                 alert('login berhasil, selamat datang kepala sekolah')
                 navigateTo('/kepala-sekolah/dashboard')
             }else if(user.user.level=='admin'){

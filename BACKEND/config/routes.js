@@ -30,9 +30,11 @@ const {
     editSiswaById
 } = require ('../controllers/siswaController');
 
+const { getSekolahAsalData } = require ('../controllers/sekolahAsalController')
+
 const multer = require('multer')
 
-const { verify, verifyOwner, verifyAdmin, verifySuperAdmin } = require('./middleware');
+const { verify, verifyAdmin, verifySuperAdmin, verifyAdminKepsek } = require('./middleware');
 const { excelUpload } = require('../controllers/uploadFileExcel');
 const { updateProfilePhoto, hapusPhoto } = require('../controllers/uploadPhotoController')
 const { upload } = require('../config/middleware')
@@ -70,11 +72,13 @@ module.exports = (app) => {
 
     //manage siswa
     app.post(`${BASE_URL}/siswa/add`, verifyAdmin, inputSiswa)
-    app.get(`${BASE_URL}/siswa`, verifyAdmin, getSiswa)
+    app.get(`${BASE_URL}/siswa`, verifyAdminKepsek , getSiswa)
     app.get(`${BASE_URL}/siswa/:id`, verifyAdmin, getSiswaById)
     app.delete(`${BASE_URL}/siswa/hapus/:id`, verifyAdmin, deleteSiswaById)
     app.patch(`${BASE_URL}/siswa/edit/:id`, verifyAdmin, editSiswaById)
 
+    //sekolah asal
+    app.get(`${BASE_URL}/sekolah-asal.json`, verifyAdminKepsek , getSekolahAsalData)
     // upload excel
     const storage = multer.diskStorage({
         destination: function (req, file, cb) {
