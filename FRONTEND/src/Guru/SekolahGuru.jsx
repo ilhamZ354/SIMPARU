@@ -1,4 +1,4 @@
-import {React, useState} from "react";
+import {React, useState, useEffect} from "react";
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { InputText } from "primereact/inputtext";
@@ -7,11 +7,30 @@ import { Button } from "primereact/button";
 import { Card } from "@material-tailwind/react";
 import Bar from "../components/charts/Bar";
 import BarOption7 from "../components/charts/BarOption7";
+import { getSekolahAsal } from "../services/sekolah.services";
 
-const SekolahUser = () =>{
+const SekolahGuru = () =>{
     const [globalFilter, setGlobalFilter] = useState('');
-
     const [selectedSekolah, setSelectedSekolah] = useState(null);
+    const [dataSekolah, setDataSekolah] = useState();
+
+    useEffect(() => {
+        const fetchSekolas = async () => {
+            try {
+                const data = await getSekolahAsal();
+                setDataSekolah(data);
+                console.log(data)
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchSekolas();
+    }, []);
+    
+    const nomorKolom = (rowData, column) => {
+        return column.rowIndex + 1;
+    };
 
     const sekolah = [
         {
@@ -87,11 +106,10 @@ const SekolahUser = () =>{
     ]
     
     const jumlah = [45,30,28,25,24,22,20,14,14,9]
-    const dataSekolah = sekolah.map((data)=>{ return data.name })
+    const sekolahData = sekolah.map((data)=>{ return data.name })
 
-    const alamatSekolah = { data: jumlah, kategori: dataSekolah }
+    const alamatSekolah = { data: jumlah, kategori: sekolahData }
 
-    // console.log(dataSekolah)
     const rightContents = (
         <div className="flex justify-end w-full">
             <span className="p-input-icon-left">
@@ -107,7 +125,7 @@ const SekolahUser = () =>{
     );
 
     const paginatorLeft = <Button type="button" icon="pi pi-refresh" className="p-button-secondary" text />;
-    const paginatorRight = <Button type="button" icon="pi pi-download" className="p-button-secondary" text />;
+    const paginatorRight = <span></span>;
 
     return(
         <div className="flex w-full">
@@ -148,7 +166,7 @@ const SekolahUser = () =>{
                         <div className="flex w-full mb-42 h-lvh" style={{maxHeight: 'calc(200vh - 160px)'}}>
                             <DataTable 
                                 className="text-xs"
-                                value={sekolah}
+                                value={dataSekolah}
                                 selectionMode={'checkbox'}
                                 selection={selectedSekolah}
                                 onSelectionChange={(e) => setSelectedSekolah(e.value)}
@@ -158,11 +176,11 @@ const SekolahUser = () =>{
                                 paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
                                 currentPageReportTemplate="{first} to {last} of {totalRecords}" paginatorLeft={paginatorLeft} paginatorRight={paginatorRight}
                                 scrollable scrollHeight="flex" tableStyle={{ minWidth: '100%' }}>
-                                    <Column field="no"  header="No" sortable style={{maxWidth:'3rem'}}></Column>
-                                    <Column field="name" header="Nama" style={{minWidth:'12rem'}}></Column>
-                                    <Column field="alamat" header="Alamat" style={{minWidth:'8rem'}}></Column>
+                                    <Column field="no" header="No" body={nomorKolom} sortable style={{maxWidth:'3rem'}}></Column>
+                                    <Column field="nama_sekolah" header="Nama" style={{minWidth:'8rem'}}></Column>
+                                    <Column field="alamat_sekolah" header="Alamat" style={{minWidth:'12rem'}}></Column>
                                     <Column field="email" header="Email" style={{minWidth:'13rem'}}></Column>
-                                    <Column field="total" header="Total" sortable></Column>
+                                    <Column field="total_siswa" header="Total" sortable style={{maxWidth:'6rem'}}></Column>
                                 </DataTable>
                             </div>
                         </div>
@@ -174,4 +192,4 @@ const SekolahUser = () =>{
     );
 };
 
-export default SekolahUser;
+export default SekolahGuru;

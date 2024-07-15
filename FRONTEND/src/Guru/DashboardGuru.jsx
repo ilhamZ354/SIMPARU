@@ -1,10 +1,10 @@
 import Dashboard from "../components/Dashboard";
 
-const DashboardUser = () =>{
+const DashboardGuru = () =>{
 
     return(
         <Dashboard/>
     );
 };
 
-export default DashboardUser;
+export default DashboardGuru;

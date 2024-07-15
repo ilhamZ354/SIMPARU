@@ -2,7 +2,7 @@ import {React, Fragment, useState } from 'react';
 import { Dropdown } from 'primereact/dropdown';
 import Geografis from '../components/Geografis';
 
-const GeografisSekolahUser = () => {
+const GeografisSekolahGuru = () => {
 
   const sekolahs = [
     {
@@ -52,4 +52,4 @@ const GeografisSekolahUser = () => {
   );
 };
 
-export default GeografisSekolahUser;
+export default GeografisSekolahGuru;

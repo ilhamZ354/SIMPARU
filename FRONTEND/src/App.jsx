@@ -17,11 +17,12 @@ import SekolahKepsek from './Kepsek/SekolahKepsek.jsx';
 import GeografisSekolahOwner from './Kepsek/GeografisSekolahKepsek.jsx';
 
 //guru
-import DashboardUser from './Siswa/DashboardUser.jsx';
-import GeografisSekolahUser from './Siswa/GeografisSekolahUser.jsx';
-import SekolahUser from './Siswa/SekolahUser.jsx';
-import SiswaUser from './Siswa/SiswaUser.jsx';
-import GeografisSiswaUser from './Siswa/GeografisSekolahUser.jsx';
+import DashboardGuru from './Guru/DashboardGuru.jsx';
+import UmpanBalikGuru from './Guru/UmpanBalikGuru.jsx';
+import GeografisSekolahGuru from './Guru/GeografisSekolahGuru.jsx';
+import SekolahGuru from './Guru/SekolahGuru.jsx';
+import SiswaGuru from './Guru/SiswaGuru.jsx';
+import GeografisSiswaGuru from './Guru/GeografisSekolahGuru.jsx';
 
 // super admin
 import Kepsek from './SuperAdmin/Kepsek.jsx';
@@ -45,12 +46,12 @@ function App() {
   const geoSiswaOwner = <GeografisSiswaKepsek/>
   const sekolahKepsek = <SekolahKepsek/>
   const geoSekolahOwner = <GeografisSekolahOwner/>
-  const dashboardUser = <DashboardUser/>
-  const siswaUser = <SiswaUser/>
-  const geoSiswaUser = <GeografisSiswaUser/>
-  const sekolahUser = <SekolahUser/>
-  const geoSekolahUser = <GeografisSekolahUser/>
-
+  const dashboardUser = <DashboardGuru/>
+  const siswaGuru = <SiswaGuru/>
+  const geoSiswaGuru = <GeografisSiswaGuru/>
+  const sekolahGuru = <SekolahGuru/>
+  const geoSekolahGuru = <GeografisSekolahGuru/>
+  const umpanBalikGuru = <UmpanBalikGuru/>
   const dashboardSuperAdmin = <DashboardSuperAdmin />
   const kepsek = <Kepsek/>
   const admin = <Admin/>
@@ -81,12 +82,13 @@ function App() {
         <Route path="/kepala-sekolah/sekolah" element={<Pages active="sekolah" title="kepala-sekolah" page={sekolahKepsek} />} />
         <Route path="/kepala-sekolah/geografis-sekolah" element={<Pages active="geografis-sekolah" title="kepala-sekolah" page={geoSekolahOwner} />} />
 
-        {/* user */}
-         <Route path="/dashboard" element={<Pages active="dashboard" title="user" page={dashboardUser} />} />
-        <Route path="/siswa" element={<Pages active="siswa" title="user" page={siswaUser} />} />
-        <Route path="/geografis-siswa" element={<Pages active="geografis-siswa" title="user" page={geoSiswaUser} />} />
-        <Route path="/sekolah" element={<Pages active="sekolah" title="user" page={sekolahUser} />} />
-        <Route path="/geografis-sekolah" element={<Pages active="geografis-sekolah" title="user" page={geoSekolahUser} />} />
+        {/* guru */}
+         <Route path="/dashboard" element={<Pages active="dashboard" title="guru" page={dashboardUser} />} />
+         <Route path="/umpan-balik" element={<Pages active="umpanbalik" title="guru" page={umpanBalikGuru} />} />
+        <Route path="/siswa" element={<Pages active="siswa" title="guru" page={siswaGuru} />} />
+        <Route path="/geografis-siswa" element={<Pages active="geografis-siswa" title="guru" page={geoSiswaGuru} />} />
+        <Route path="/sekolah" element={<Pages active="sekolah" title="guru" page={sekolahGuru} />} />
+        <Route path="/geografis-sekolah" element={<Pages active="geografis-sekolah" title="guru" page={geoSekolahGuru} />} />
       </Routes>
     </Router>
   );

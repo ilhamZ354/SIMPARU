@@ -230,6 +230,15 @@ import { Link } from 'react-router-dom';
           Dashboard
         </ListItem>
         </Link>
+        {/* umpan balik */}
+        <Link to="/umpan-balik">
+        <ListItem className={`${(active=='umpanbalik') ? 'bg-slate-100':'bg-white'} hover:bg-sky-50`}>
+          <ListItemPrefix>
+            <PaperAirplaneIcon className="h-4 w-4" />
+          </ListItemPrefix>
+          Umpan Balik
+        </ListItem>
+        </Link>
         {/* Siswa */}
         <Accordion open={open5 === 2}>
             <ListItem className="p-0" selected={open5 === 2}>
@@ -467,7 +476,7 @@ const Sidebar = (props) => {
         case 'super-admin':
             SidebarComponent = sidebarSuperAdmin;
             break;
-        case 'user':
+        case 'guru':
           SidebarComponent = sidebarUser;
             break;
         case 'kepala-sekolah':

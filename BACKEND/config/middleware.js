@@ -73,7 +73,7 @@ const verifyKepsek = async (req, res, next) => {
   };
 
 
-  const verifyAdminKepsek = async (req, res, next) => {
+  const verifyAdminKepsekGuru = async (req, res, next) => {
     try {
       const token = req.header('Authorization').replace('Bearer ', '');
       const decoded = jwt.verify(token, process.env.ACCESS_TOKEN);
@@ -81,7 +81,7 @@ const verifyKepsek = async (req, res, next) => {
         _id: decoded._id,
         'tokens.token': token,
       });
-      if (user.level !=='kepala-sekolah' && user.level !== 'admin') throw new Error();
+      if (user.level !=='kepala-sekolah' && user.level !== 'admin' && user.level !== 'guru') throw new Error();
       req.token = token;
       req.user = user;
       next();
@@ -105,4 +105,4 @@ const upload = multer({
   storage: storage,
 }).single('photo');
   
-module.exports = { verify, verifySuperAdmin, verifyAdminKepsek, verifyKepsek, verifyAdmin, upload };
+module.exports = { verify, verifySuperAdmin, verifyAdminKepsekGuru, verifyKepsek, verifyAdmin, upload };
