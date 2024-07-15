@@ -96,7 +96,7 @@ const Admin = () => {
               setEditAdmin(false);
               alert('Data admin berhasil diperbarui!');
             } else {
-              alert('Data admin gagal diperbarui!');
+              alert('Data admin gagal diperbarui, periksa kembali data yang anda masukkan!');
             }
         } catch (error) {
             console.error(error);

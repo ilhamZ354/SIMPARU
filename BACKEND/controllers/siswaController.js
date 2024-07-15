@@ -5,7 +5,7 @@ const geocodeAddress = require('../helper/geocodeAddress');
 const mongoose = require('mongoose')
 
 const inputSiswa = async (req, res) => {
-    if (req.user.role !== 'admin') {
+    if (req.user.level !== 'admin') {
         return res.status(400).send({ error: 'Kamu tidak bisa melakukan tambah data siswa' });
     }
     try {
@@ -14,15 +14,15 @@ const inputSiswa = async (req, res) => {
 
         console.log({ alamat_lengkap})
         // Cek apakah alamat sudah ada di database
-        // let hasAlamat = await Siswa.findOne({ alamat_lengkap });
+        let hasAlamat = await Siswa.findOne({ alamat_lengkap });
         
-        // if (!hasAlamat) {
-        //     console.log('alamat siswa belum ada, panggil API')
-        //     lokasi = await geocodeAddress(alamat_lengkap);
-        // } else {
-        //     console.log('alamat siswa sudah ada, tidak perlu panggil API')
-        //     lokasi = hasAlamat.lokasi;
-        // }
+        if (!hasAlamat) {
+            console.log('alamat siswa belum ada, panggil API')
+            lokasi = await geocodeAddress(alamat_lengkap);
+        } else {
+            console.log('alamat siswa sudah ada, tidak perlu panggil API')
+            lokasi = hasAlamat.lokasi;
+        }
 
         const siswa = new Siswa({
             ...rest,
@@ -37,19 +37,18 @@ const inputSiswa = async (req, res) => {
             jurusan
         });
         await rombelSiswa.save();
-        siswa.rombel = rombelSiswa._id; 
 
         //sekolah asal
         let lokasiSekolah;
-        // let hasAlamatSekolah = await SekolahAsal.findOne({ alamat_sekolah });
+        let hasAlamatSekolah = await SekolahAsal.findOne({ alamat_sekolah });
         
-        // if (!hasAlamatSekolah) {
-        //     console.log('alamat sekolah belum ada, panggil API')
-        //     lokasiSekolah = await geocodeAddress(alamat_sekolah);
-        // } else {
-        //     console.log('alamat sekolah sudah ada, tidak perlu panggil API')
-        //     lokasiSekolah = hasAlamatSekolah.lokasi;
-        // }
+        if (!hasAlamatSekolah) {
+            console.log('alamat sekolah belum ada, panggil API')
+            lokasiSekolah = await geocodeAddress(alamat_sekolah);
+        } else {
+            console.log('alamat sekolah sudah ada, tidak perlu panggil API')
+            lokasiSekolah = hasAlamatSekolah.lokasi;
+        }
 
         const sekolahAsal = new SekolahAsal({
             siswa_id: siswa._id,
@@ -59,6 +58,8 @@ const inputSiswa = async (req, res) => {
             lokasi : lokasiSekolah
         });
         await sekolahAsal.save();
+
+        siswa.rombel = rombelSiswa._id; 
         siswa.sekolahAsal = sekolahAsal._id;
 
         await siswa.save();
@@ -70,19 +71,16 @@ const inputSiswa = async (req, res) => {
     }    
 };
 
-//get siswa
+// get siswa
 const getSiswa = async (req, res) => {
     try {
-        const siswa = await Siswa.find().sort({ createdAt: -1 })
-            .populate({
-                path: 'rombel',
-                select: 'jurusan'
-            })
-            .populate({
-                path: 'sekolahAsal',
-                select: 'nama_sekolah email alamat_sekolah lokasi'
-            });
-        
+        // Log to check database connection
+        console.log("Fetching siswa data...");
+
+        const siswa = await Siswa.find()
+            .populate('rombel', 'jurusan') 
+            .populate('sekolahAsal', 'nama_sekolah email alamat_sekolah lokasi'); 
+
         if (!siswa) {
             return res.status(404).json({ msg: 'Data siswa tidak ditemukan' });
         }
@@ -97,7 +95,7 @@ const getSiswa = async (req, res) => {
 
 //get siswa by id for admin
 const getSiswaById = async (req, res) => {
-    if (req.user.role !== 'admin')
+    if (req.user.level !== 'admin')
         return res.status(400).send({
           error: 'Data tidak diperbolehkan',
         });
@@ -115,7 +113,7 @@ const getSiswaById = async (req, res) => {
 //delete  user by id for admin
 const deleteSiswaById = async(req, res) => {
 
-    if (req.user.role !== 'admin')
+    if (req.user.level !== 'admin')
         return res.status(400).send({
           error: 'Hanya admin yang dapat menghapus siswa',
         });
@@ -138,32 +136,86 @@ const deleteSiswaById = async(req, res) => {
 }
 
 
-//edit siswa
+//edit siswa by id
 const editSiswaById = async (req, res) => {
-    if (req.user.role !== 'admin')
-        return res.status(400).send({
-          error: 'Hanya admin yang dapat menghapus siswa',
-    });
-
-    const { id } = req.params;
-    try {
-        if (!mongoose.Types.ObjectId.isValid(id)) {
-            return res.status(404).json({error: 'Id tidak valid'})
-        }
-        
-        const ubahSiswa = await Siswa.findOneAndUpdate({_id: id}, {
-            ...req.body
+    if (req.user.level !== 'admin') {
+        return res.status(403).send({
+            error: 'Hanya admin yang dapat mengedit siswa',
         });
+    }
+
+    try {
+        const { id } = req.params;
+        const { alamat_lengkap, jurusan, nama_sekolah, email, alamat_sekolah, ...rest } = req.body;
+
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(404).json({ error: 'ID tidak valid' });
+        }
+
+        let lokasi;
+        let hasAlamat = await Siswa.findOne({ alamat_lengkap });
+
+        if (!hasAlamat) {
+            console.log('Alamat siswa belum ada, panggil API');
+            lokasi = await geocodeAddress(alamat_lengkap);
+        } else {
+            console.log('Alamat siswa sudah ada, tidak perlu panggil API');
+            lokasi = hasAlamat.lokasi;
+        }
+
+        const ubahSiswa = await Siswa.findOneAndUpdate(
+            { _id: id },
+            {
+                ...rest,
+                alamat_lengkap,
+                lokasi,
+            },
+            { new: true }
+        );
 
         if (!ubahSiswa) {
-            return res.status(400).json({error: 'Ubah data gagal'})
-          }
+            return res.status(404).json({ error: 'Siswa tidak ditemukan' });
+        }
 
-        res.send({ message: 'Siswa berhasil update' });
+        await Rombel.findOneAndUpdate(
+            { siswa_id: id },
+            { jurusan },
+            { new: true }
+        );
+
+        let lokasiSekolah;
+        let hasAlamatSekolah = await SekolahAsal.findOne({ alamat_sekolah });
+
+        if (!hasAlamatSekolah) {
+            console.log('Alamat sekolah belum ada, panggil API');
+            lokasiSekolah = await geocodeAddress(alamat_sekolah);
+        } else {
+            console.log('Alamat sekolah sudah ada, tidak perlu panggil API');
+            lokasiSekolah = hasAlamatSekolah.lokasi;
+        }
+
+        const ubahSekolahAsal = await SekolahAsal.findOneAndUpdate(
+            { siswa_id: id },
+            {
+                nama_sekolah,
+                email,
+                alamat_sekolah,
+                lokasi: lokasiSekolah,
+            },
+            { new: true }
+        );
+
+        if (!ubahSekolahAsal) {
+            return res.status(404).json({ error: 'Sekolah asal tidak ditemukan' });
+        }
+
+        res.send({ message: 'Siswa berhasil diperbarui' });
     } catch (error) {
-        res.sendStatus(400);
+        console.error('Error updating student:', error);
+        res.status(500).send({ error: 'Terjadi kesalahan pada server' });
     }
-}
+};
+
 
 
 module.exports = { inputSiswa, getSiswa, getSiswaById, deleteSiswaById, editSiswaById }

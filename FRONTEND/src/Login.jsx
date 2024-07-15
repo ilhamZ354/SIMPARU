@@ -35,7 +35,7 @@ const Login = () => {
         if(user && user.status==true){
             if(user.user.level=='owner'){
                 alert('login berhasil, selamat datang kepala sekolah')
-                navigateTo('/owner/dashboard')
+                navigateTo('/kepala-sekolah/dashboard')
             }else if(user.user.level=='admin'){
                 alert('login berhasil, selamat datang admin')
                 navigateTo('/admin/dashboard')

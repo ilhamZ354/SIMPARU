@@ -49,7 +49,6 @@ const siswaSchema = new Schema({
         },
         coordinates: {
           type: [Number],
-          default: [99.65919389999990,3.0464583]
         },
     },
     telepon: {
@@ -76,12 +75,12 @@ const siswaSchema = new Schema({
         }
     },
     rombel: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Rombel', // Changed to "Rombel"
+        type: Schema.Types.ObjectId,
+        ref: 'Rombel',
       },
       sekolahAsal: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'SekolahAsal', // Changed to "SekolahAsal"
+        type: Schema.Types.ObjectId,
+        ref: 'SekolahAsal',
       },
 }, {
     timestamps: true

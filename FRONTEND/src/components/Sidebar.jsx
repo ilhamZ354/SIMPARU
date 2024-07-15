@@ -5,8 +5,6 @@ import {
   List,
   ListItem,
   ListItemPrefix,
-  ListItemSuffix,
-  Chip,
   Accordion,
   AccordionHeader,
   AccordionBody,
@@ -14,12 +12,12 @@ import {
 
 import {
   HomeIcon,
-  UserIcon,
   ChevronDownIcon,
   AcademicCapIcon,
   BuildingLibraryIcon,
   ChevronRightIcon,
-  UsersIcon
+  UsersIcon,
+  PaperAirplaneIcon
 } from "@heroicons/react/24/solid";
  
 import LogoSMK from '../assets/img/logo-smk-muse.png';
@@ -57,15 +55,6 @@ import { Link } from 'react-router-dom';
             Dashboard
           </ListItem>
           </Link>
-          {/* User */}
-          <Link to='/admin/user'>
-          <ListItem className={`${(active=='user') ? 'bg-slate-100':'bg-white'} hover:bg-sky-50`}>
-            <ListItemPrefix>
-              <UserIcon className="h-4 w-4" />
-            </ListItemPrefix>
-            User
-          </ListItem>
-          </Link>
           {/* Siswa */}
           <Accordion open={open === 2}>
             <ListItem className="p-0" selected={open === 2}>
@@ -101,57 +90,19 @@ import { Link } from 'react-router-dom';
                     Data siswa
                   </ListItem>
                   </Link>
-                  <Link to="/admin/geografis-siswa">
-                  <ListItem className={`${(active=='geografis-siswa') ? 'bg-slate-100':'bg-white'} hover:bg-sky-50`}>
-                    <ListItemPrefix>
-                      <ChevronRightIcon  strokeWidth={3} className="h-4 w-4" />
-                    </ListItemPrefix>
-                    Geografis
-                  </ListItem>
-                  </Link>
                 </List>
               </AccordionBody>
             )}
           </Accordion>
-          {/* sekolah */}
-          <Accordion open={open2 === 2}>
-            <ListItem className="p-0" selected={open2 === 2}>
-              <AccordionHeader onClick={() => handleOpen2(2)} className="border-b-1 p-3 w-full rounded-lg hover:bg-slate-100">
-                <ListItemPrefix>
-                  <BuildingLibraryIcon className="h-4 w-4" />
-                </ListItemPrefix>
-                <Typography color="blue-gray" className="mr-auto text-sm">
-                  Sekolah Asal
-                </Typography>
-                <ChevronDownIcon
-                  strokeWidth={2.5}
-                  className={`mx-auto h-4 w-4 ml-1 transition-transform ${open2 === 1 ? "rotate-180" : ""}`}
-                />
-              </AccordionHeader>
-            </ListItem>
-            {open2 === 2 && (
-              <AccordionBody className="py-1">
-                <List className="p-0 text-sm">
-                <Link to="/admin/sekolah">
-                  <ListItem className={`${(active=='sekolah') ? 'bg-slate-100':'bg-white'} hover:bg-sky-50`}>
-                    <ListItemPrefix>
-                      <ChevronRightIcon  strokeWidth={3} className="h-4 w-4" />
-                    </ListItemPrefix>
-                    Data sekolah
-                  </ListItem>
-                  </Link>
-                  <Link to="/admin/geografis-sekolah">
-                  <ListItem className={`${(active=='geografis-sekolah') ? 'bg-slate-100':'bg-white'} hover:bg-sky-50`}>
-                    <ListItemPrefix>
-                      <ChevronRightIcon  strokeWidth={3} className="h-4 w-4" />
-                    </ListItemPrefix>
-                    Geografis
-                  </ListItem>
-                  </Link>
-                </List>
-              </AccordionBody>
-            )}
-          </Accordion>
+          {/* umpan balik */}
+          <Link to="/admin/umpan-balik">
+          <ListItem className={`${(active=='umpanbalik') ? 'bg-slate-100':'bg-white'} hover:bg-sky-50`}>
+            <ListItemPrefix>
+              <PaperAirplaneIcon className="h-4 w-4" />
+            </ListItemPrefix>
+            Umpan Balik
+          </ListItem>
+          </Link>
         </List>
       </Card>
     );

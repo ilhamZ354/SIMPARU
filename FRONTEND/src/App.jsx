@@ -4,9 +4,8 @@ import Pages from './components/Page';
 import DashboardAdmin from './Admin/Dashboard';
 import Baru from './Admin/Baru';
 import Siswa from './Admin/Siswa';
-import Sekolah from './Admin/Sekolah';
-import GeografisSekolah from './Admin/GeografisSekolah';
-import GeografisSiswa from './Admin/GeografisSiswa';
+import UmpanBalik from './Admin/UmpanBalik.jsx';
+
 import DashboardOwner from './Owner/DashboardOwner';
 import SiswaOwner from './Owner/SiswaOwner';
 import GeografisSiswaOwner from './Owner/GeografisSiswaOwner';
@@ -30,9 +29,7 @@ function App() {
   const dashboardAdmin = <DashboardAdmin />
   const siswabaru = <Baru/>
   const siswa = <Siswa/>
-  const sekolah = <Sekolah/>
-  const geografisSiswa = <GeografisSiswa/>
-  const geografis = <GeografisSekolah/>
+  const umpanBalikAdmin = <UmpanBalik/>
   const dashboardOwner = <DashboardOwner/>
   const siswaOwner = <SiswaOwner/>
   const geoSiswaOwner = <GeografisSiswaOwner/>
@@ -62,12 +59,9 @@ function App() {
 
         {/* admin */}
         <Route path="/admin/dashboard" element={<Pages title="admin" active='dashboard' page={dashboardAdmin} />} />
-        <Route path="/admin/user" element={<Pages active="user" title="admin" page={''} />} />
         <Route path="/admin/siswa-baru" element={<Pages active="baru" title="admin" page={siswabaru} />} />
         <Route path="/admin/siswa" element={<Pages active="siswa" title="admin" page={siswa} />} />
-        <Route path="/admin/geografis-siswa" element={<Pages active="geografis-siswa" title="admin" page={geografisSiswa} />} />
-        <Route path="/admin/sekolah" element={<Pages active="sekolah" title="admin" page={sekolah} />} />
-        <Route path="/admin/geografis-sekolah" element={<Pages active="geografis-sekolah" title="admin" page={geografis} />} />
+        <Route path="/admin/umpan-balik" element={<Pages active="umpanbalik" title="admin" page={umpanBalikAdmin} />} />
 
         {/* owner */}
         <Route path="/owner/dashboard" element={<Pages active="dashboard" title="owner" page={dashboardOwner} />} />

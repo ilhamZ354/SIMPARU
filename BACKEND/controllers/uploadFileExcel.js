@@ -4,6 +4,7 @@ const Siswa = require('../models/siswaModel');
 const Rombel = require('../models/rombelModel');
 const SekolahAsal = require('../models/sekolahAsalModel');
 const path = require('path');
+const geocodeAddress = require('../helper/geocodeAddress');
 
 const excelUpload = async (req, res) => {
   try {
@@ -22,79 +23,87 @@ const excelUpload = async (req, res) => {
       const newItem = {};
       Object.keys(item).forEach(key => {
         let newKey = key.replace(/\s/g, '_');
-          if (newKey === 'Tanggal_lahir') {
-            console.log(newKey)
-            newItem[newKey] = convertExcelDate(item[key]);
-          } else {
-            newItem[newKey] = item[key];
-          }
+        if (newKey === 'TANGGAL_LAHIR') {
+          newItem[newKey] = convertExcelDate(item[key]);
+        } else {
+          newItem[newKey] = item[key];
+        }
       });
       return newItem;
     });
 
-    console.log(newData)
-
     for (const item of newData) {
+      const siswa = new Siswa({
+        nama: item.NAMA,
+        nipd: item.NIPD,
+        nisn: item.NISN,
+        jenis_kelamin: item.JK === 'L' ? 'Laki-laki' : item.JK === 'P' ? 'Perempuan' : '',
+        tempat_lahir: item.TEMPAT_LAHIR,
+        nik: item.NIK,
+        telepon: item.TELEPON,
+        tanggal_lahir: item.TANGGAL_LAHIR,
+        agama: item.AGAMA,
+        alamat_lengkap: item.ALAMAT,
+        orangtua: {
+          ayah: {
+            nama: item.NAMA_AYAH,
+          },
+          ibu: {
+            nama: item.NAMA_IBU,
+          },
+        },
+        nilai: item.NILAI_AKHIR,
+      });
 
-      //siswa model
-      const siswa = new Siswa(item);
-      siswa.nama = item.Nama;
-      siswa.nipd = item.NIPD;
-      siswa.nisn = item.NISN;
-      siswa.jenis_kelamin = item.Jenis_kelamin;
-      siswa.tempat_lahir = item.Tempat_lahir;
-      siswa.nik = item.NIK;
-      siswa.telepon = item.Telepon;
-      siswa.tanggal_lahir = item.Tanggal_lahir;
-      siswa.agama = item.Agama;
-      siswa.alamat_lengkap = item.Alamat;
-      siswa.orangtua.ayah.nama = item.Nama_Ayah;
-      siswa.orangtua.ibu.nama = item.Nama_Ibu;
-      siswa.nilai = item.Nilai_akhir;
-      siswa.lokasi.type = 'Point';
-      // siswa.lokasi.coordinates = item.Koordinat_alamat_siswa;
-    
-      if (item.Koordinat_alamat_siswa) {
-        const [lat, long] = item.Koordinat_alamat_siswa.replace(/[\[\]]/g, '').split(',').map(parseFloat);
-        siswa.lokasi.coordinates = [lat, long];
-      } 
-      else {
-        siswa.lokasi.type = 'Point';
-        siswa.lokasi.coordinates = null;
+      const alamat = siswa.alamat_lengkap;
+      let hasAlamat = await Siswa.findOne({ alamat });
+
+      if (!hasAlamat) {
+        siswa.lokasi = await geocodeAddress(alamat);
+      } else {
+        siswa.lokasi = hasAlamat.lokasi;
       }
 
-      ///simpan data
-      try {
-        await siswa.save();
+      // Save siswa first without sekolahAsal and rombel references
+      await siswa.save();
 
-        const rombel = new Rombel({
-          siswa_id: siswa._id,
-          jurusan: item.Jurusan
-        });
-        await rombel.save();
+      const rombel = new Rombel({
+        siswa_id: siswa._id,
+        jurusan: item.JURUSAN === 'TKJ' ? 'Teknik Komputer dan Jaringan' : item.JURUSAN === 'TAV' ? 'Teknik Audio Video' : item.JURUSAN === 'TBSM' ? 'Teknik dan Bisnis Sepeda Motor' : item.JURUSAN === 'TBO' ? 'Teknik Bodi Otomotif' : '',
+      });
+      await rombel.save();
 
-        const [latSekolah, longSekolah] = item.Koordinat_alamat_sekolah.replace(/[\[\]]/g, '').split(',').map(parseFloat);
+      const alamat_sekolah = item.ALAMAT_SEKOLAH;
+      let lokasiSekolah;
+      let hasAlamatSekolah = await SekolahAsal.findOne({ alamat_sekolah });
 
-        const sekolahAsal = new SekolahAsal({
-          siswa_id: siswa._id,
-          nama_sekolah: item.Sekolah_asal,
-          alamat_sekolah: item.Alamat_sekolah,
-          email: item.Email_sekolah,
-          lokasi : { type: 'Point', coordinates: [latSekolah, longSekolah] }
-        });
-
-        await sekolahAsal.save();
-
-        console.log('Data saved:');
-      } catch (err) {
-        console.log('Error saving data:', err);
+      if (!hasAlamatSekolah) {
+        lokasiSekolah = await geocodeAddress(alamat_sekolah);
+      } else {
+        lokasiSekolah = hasAlamatSekolah.lokasi;
       }
-    
+
+      const sekolahAsal = new SekolahAsal({
+        siswa_id: siswa._id,
+        nama_sekolah: item.SEKOLAH_ASAL,
+        alamat_sekolah: item.ALAMAT_SEKOLAH,
+        email: item.EMAIL_SEKOLAH,
+        lokasi: lokasiSekolah,
+      });
+      await sekolahAsal.save();
+
+      // Update siswa with references to rombel and sekolahAsal
+      siswa.rombel = rombel._id;
+      siswa.sekolahAsal = sekolahAsal._id;
+
+      await siswa.save();
+
+      console.log('Data saved:');
     }
 
     res.send('File uploaded successfully!');
   } catch (err) {
-    console.log(err);
+    console.log('Error uploading file:', err);
     res.status(500).send('Error uploading file!');
   }
 };

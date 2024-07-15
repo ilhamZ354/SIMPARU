@@ -1,18 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "primereact/button";
-import { InputText } from "primereact/inputtext";
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-import { useState } from "react";
 import { Dialog } from 'primereact/dialog';
-import { Dropdown } from 'primereact/dropdown';
-import { Toolbar } from 'primereact/toolbar';
-import PhotoProfile from '../../../BACKEND/uploads/images/profil-image2.jpg';
 import { Card } from "@material-tailwind/react";
-import PieOption from "../components/charts/PieOption";
-import BarOption7 from "../components/charts/BarOption7";
 import Studentform from "../components/Studentform";
 import { deleteSiswa, siswas } from "../services/siswa.service";
+import { format } from 'date-fns';
 
 const Siswa = () => {
     const [setNewStudent, setSelectedNewStudent] = useState();
@@ -21,8 +15,9 @@ const Siswa = () => {
     const [viewDetail, setViewdetail] = useState(false);
     const [dataSiswa, setDataSiswa] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [siswaToEdit, setSiswaToEdit] = useState();
-    
+    const [siswaToEdit, setSiswaToEdit] = useState(null);
+    const [detailSiswa, setDetailSiswa] = useState(null);
+
     useEffect(() => {
         const fetchSiswas = async () => {
             try {
@@ -49,55 +44,65 @@ const Siswa = () => {
             alert('Terjadi kesalahan saat menghapus data siswa!');
         }
     };
-    
+
     const nomorKolom = (rowData, column) => {
         return column.rowIndex + 1;
     };
 
-    const dataAlamat = {
-        data: [ 80, 20, 30, 65,50,33,12, 30],
-        kategori: ['Kisaran timur','Kisaran barat','Pulo Bandring', 'Rawang Panca Arga', 'Air joman', 'Meranti', 'Pulo raja', 'Tanjungbalai', ]
-    }
-
-    const bodyAction = (rowData) =>{
-        return(
+    const formatTanggal = (date) => {
+        if (!date) return '';
+        return format(new Date(date), 'dd-MM-yyyy');
+    };
+    
+    const bodyAction = (rowData) => {
+        return (
             <div className="flex flex-row">
-                <Button label="" icon="pi pi-external-link" className="p-button-warning h-8" 
-                 onClick={()=>{
-                    setViewdetail(true);
-                    setSiswaToEdit(rowData);
-                    }
-                }></Button>
-                <div className="flex w-fulll">
-                    <button type="submit" label="edit siswa" className="text-xs p-2 border border-cyan-600 w-24 rounded-xl ml-2 text-cyan-600 justify-center font-normal hover:bg-cyan-800 hover:text-slate-50" 
-                    onClick={()=>{
-                        setEdituser(true);
-                        setSiswaToEdit(rowData);
-                        console.log(siswaToEdit)
-                    }}
-                    >edit profil</button>
-                    <Dialog 
-                            header="Edit Siswa" 
-                            visible={editUser} 
-                            style={{ width: '65vw', minWidth: '40rem' }} 
-                            onHide={() => { if (!editUser) return; setEdituser(false); }}
-                        >
-                            <Studentform data={siswaToEdit}/>
-                        </Dialog>
+                <Button label="" icon="pi pi-external-link" className="p-button-warning h-8"
+                    onClick={() => {
+                        setViewdetail(true);
+                        setDetailSiswa(rowData);
+                    }}></Button>
+                <div className="flex w-full">
+                    <button type="submit" label="edit siswa" className="text-xs p-2 border border-cyan-600 w-24 rounded-xl ml-2 text-cyan-600 justify-center font-normal hover:bg-cyan-800 hover:text-slate-50"
+                        onClick={() => {
+                            setEdituser(true);
+                            setSiswaToEdit(rowData);
+                        }}
+                    >edit siswa</button>
+                    <Dialog
+                        header="Edit Siswa"
+                        visible={editUser}
+                        style={{ width: '65vw', minWidth: '40rem' }}
+                        onHide={() => setEdituser(false)}
+                    >
+                        <Studentform data={siswaToEdit} />
+                    </Dialog>
                 </div>
-                <Dialog header="Detail siswa" visible={viewDetail} style={{ width: '50vw' }} onHide={() => {if (!viewDetail) return; setViewdetail(false); }}>
-                    <div className="flex w-full">
-                        <DataTable 
-                        value={dataSiswa.siswa.map(() => dataSiswa[0])}
-                        tableStyle={{minWidth:'50rem'}}
-                        >
-                            <Column field="no" header="no"></Column>
-                            <Column field="nama" header="Nama"></Column>
-                            <Column field="asal_sekolah" header="Sekolah asal" ></Column>
-                            <Column field="alamat" header="Alamat siswa"></Column>
-                            <Column field="jurusan" header="Jurusan"></Column>
-                        </DataTable>    
-                    </div> 
+                <Dialog header="Detail siswa" visible={viewDetail} style={{ width: '50vw' }} onHide={() => setViewdetail(false)}>
+                    {detailSiswa && (
+                        <div className="flex w-full">
+                            <DataTable
+                            scrollable scrollW="flex" scrollDirection="right" 
+                            className="text-start"
+                            value={[detailSiswa]}>
+                                <Column field="no" header="No" body={nomorKolom}></Column>
+                                <Column field="nama" header="Nama"  style={{minWidth:'15vw'}}></Column>
+                                <Column field="nisn" header="NISN" style={{minWidth:'15vw'}}></Column>
+                                <Column field="nipd" header="NIPD" style={{minWidth:'15vw'}}></Column>
+                                <Column field="jenis_kelamin" header="Jenis Kelamin" style={{minWidth:'10vw'}}></Column>
+                                <Column field="tempat_lahir" header="Tempat lahir" style={{minWidth:'15vw'}}></Column>
+                                <Column field="tanggal_lahir" header="Tanggal lahir" body={(rowData) => formatTanggal(rowData.tanggal_lahir)} style={{ minWidth: '15vw' }}></Column>
+                                <Column field="nik" header="NIK" style={{minWidth:'15vw'}}></Column>
+                                <Column field="telepon" header="Telepon" style={{minWidth:'15vw'}}></Column>
+                                <Column field="nilai" header="Nilai Akhir" style={{minWidth:'10vw'}}></Column>
+                                <Column field="orangtua.ayah.nama" header="Ayah" style={{minWidth:'15vw'}}></Column>
+                                <Column field="orangtua.ibu.nama" header="Ibu" style={{minWidth:'15vw'}}></Column>
+                                <Column field="sekolahAsal.nama_sekolah" header="Sekolah Asal" style={{minWidth:'20vw'}}></Column>
+                                <Column field="alamat_lengkap" header="Alamat Siswa"  style={{minWidth:'40vw'}}></Column>
+                                <Column field="rombel.jurusan" header="Jurusan" style={{minWidth:'20vw'}}></Column>
+                            </DataTable>
+                        </div>
+                    )}
                 </Dialog>
             </div>
         );
@@ -112,10 +117,9 @@ const Siswa = () => {
         />
     );
 
+    const paginatorLeft = <Button type="button" icon="pi pi-refresh" className="p-button-info" text onClick={() => window.location.reload()} />;
+    const paginatorRight = <span></span>
 
-    const paginatorLeft = <Button type="button" icon="pi pi-refresh" className="p-button-info" text onClick={() => window.location.reload()}/>;
-    const paginatorRight = <Button type="button" icon="pi pi-download" className="p-button-info" text />;
-    
     return (
         <div className='flex w-full mb-4'>
             <div className='flex flex-col w-full mr-3'>
@@ -133,39 +137,7 @@ const Siswa = () => {
                     </div>
                 </div>
                 <div className="flex flex-col mt-4">
-                    <div className="flex w-full">
-                        <div className="flex flex-row gap-4 w-full">
-                            <div className="flex w-1/3">
-                            <Card className="w-full bg-sky-800 mr-4" title="card 1">
-                                <div className="w-full m-2">
-                                    <div className="flex flex-col">
-                                    <span className='text-white font-sans text-xs ml-3 mt-2'>Grafik jurusan semua siswa</span>
-                                        <PieOption
-                                        style={{marginTop:'5px'}}
-                                    />
-                                    </div>
-                                </div>
-                            </Card>
-                            </div>
-                            <div className="w-2/3">
-                                <Card className="w-full bg-sky-800" title="card 2">
-                                    <div className="w-full m-2">
-                                            <div className="flex flex-col">
-                                            <span className='text-white font-sans text-xs ml-3 mt-2'>Grafik alamat siswa</span>
-                                                <BarOption7
-                                                style={{marginTop:'2px', height:'250px', width:'90%', marginBottom:'5px'}}
-                                                datas={dataAlamat}
-                                            />
-                                            </div>
-                                        </div>
-                                </Card>
-                            </div>
-                        </div>
-                    </div>
                     <div className="flex flex-col  w-full mt-4">
-                        <div className="w-full text-slate-400 font-sans">
-                            <span>Terakhir update pada : 22/04/2023</span>
-                        </div>
                         <Card className="w-full rounded-none" title="card 3">
                         <div className="flex w-full mt-2 rounded-lg" style={{ maxHeight: 'calc(200vh - 160px)'}}>
                                 <DataTable 
@@ -186,7 +158,6 @@ const Siswa = () => {
                                     <Column field="sekolahAsal.nama_sekolah" header="Sekolah Asal" filter filterPlaceholder="Sekolah.." style={{minWidth:'14rem'}}></Column>
                                     <Column field="rombel.jurusan" header="Jurusan" filter filterPlaceholder="Jurusan.." style={{ minWidth: '12rem' }}></Column>
                                     <Column field="" header="" body={bodyAction}></Column>
-                                    {console.log(dataSiswa.siswa)}
                                 </DataTable>
                             </div>
                         </Card>

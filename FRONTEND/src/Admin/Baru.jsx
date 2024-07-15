@@ -46,39 +46,7 @@ const Baru = () => {
         }
       };
 
-    const [globalFilter, setGlobalFilter] = useState('');
 
-
-        const leftContents = (
-            <div className="flex flex-row">
-                <Button
-                icon="pi pi-trash"
-                className="p-button-info"
-            />
-                <div className="bg-sky-800 rounded-lg ml-2">
-                    <h3 className="font-sans text-center text-xl text-white">Data preview</h3>
-                </div>
-            </div>
-        );
-    
-        const rightContents = (
-            <div className="flex justify-end w-full">
-                <span className="p-input-icon-left">
-                    <i className="pi pi-search" />
-                    <InputText
-                        value={globalFilter}
-                        onChange={(e) => setGlobalFilter(e.target.value)}
-                        placeholder="Search"
-                    />
-                </span>
-            </div>
-        );
-
-        const paginatorLeft = <Button type="button" icon="pi pi-refresh" className="p-button-info" text />;
-        const paginatorRight = <Button type="button" label="simpan" icon="pi pi-check" className="p-button-info" text />;
-
-
-        
     return (
         <div className="flex w-full">
             <div className="grid grid-flow-row w-full mr-4">

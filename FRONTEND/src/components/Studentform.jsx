@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { InputText } from 'primereact/inputtext';
 import { Calendar } from 'primereact/calendar';
 import { Dropdown } from 'primereact/dropdown';
@@ -10,8 +10,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { Button } from 'primereact/button';
 
-
-const StudentForm = () => {
+const StudentForm = ({ data }) => {
   const [dataAlamat, setDataAlamat] = useState({
     alamat: '',
     kecamatan: '',
@@ -50,8 +49,54 @@ const StudentForm = () => {
     nama_sekolah: '',
     email: '',
     alamat_sekolah: ''
-
   });
+
+  useEffect(() => {
+    if (data) {
+      console.log("Received data:", data);
+      setFormData({
+        nama: data.nama || '',
+        nipd: data.nipd || '',
+        nisn: data.nisn || '',
+        jenis_kelamin: data.jenis_kelamin || '',
+        tempat_lahir: data.tempat_lahir || '',
+        tanggal_lahir: new Date(data.tanggal_lahir) || null,
+        nik: data.nik || '',
+        agama: data.agama || '',
+        alamat_lengkap: data.alamat_lengkap || '',
+        jurusan: data.rombel?.jurusan || '',
+        nilai: data.nilai || '',
+        telepon: data.telepon || '',
+        orangtua: {
+          ayah: {
+            nama: data.orangtua?.ayah?.nama || ''
+          },
+          ibu: {
+            nama: data.orangtua?.ibu?.nama || ''
+          }
+        },
+        nama_sekolah: data.sekolahAsal?.nama_sekolah || '',
+        email: data.sekolahAsal?.email || '',
+        alamat_sekolah: data.sekolahAsal?.alamat_sekolah || ''
+      });
+
+      const alamatParts = (data.alamat_lengkap || '').split(', ');
+      setDataAlamat({
+        alamat: alamatParts[0] || '',
+        kecamatan: alamatParts[1] || '',
+        kabupaten: alamatParts[2] || '',
+        provinsi: alamatParts[3] || ''
+      });
+
+      const alamatSekolahParts = (data.sekolahAsal?.alamat_sekolah || '').split(', ');
+      setDataAlamatSekolah({
+        alamatSekolah: alamatSekolahParts[0] || '',
+        kecamatanSekolah: alamatSekolahParts[1] || '',
+        kabupatenSekolah: alamatSekolahParts[2] || '',
+        provinsiSekolah: alamatSekolahParts[3] || ''
+      });
+    }
+  }, [data]);
 
   const genderOptions = [
     { label: 'Laki-laki', value: 'Laki-laki' },
@@ -67,11 +112,11 @@ const StudentForm = () => {
   ];
 
   const jurusanOption = [
-    { label: "Teknik Komputer dan Jaringan", value: "Teknik Komputer dan Jaringan"},
-    { label: "Teknik Audio Video", value: "Teknik Audio Video"},
-    { label: "Teknik dan Bisnis Sepeda Motor", value: "Teknik dan Bisnis Sepeda Motor"},
-    { label: "Teknik Bodi Otomotif", value: "Teknik Bodi Otomotif"},
-  ]
+    { label: "Teknik Komputer dan Jaringan", value: "Teknik Komputer dan Jaringan" },
+    { label: "Teknik Audio Video", value: "Teknik Audio Video" },
+    { label: "Teknik dan Bisnis Sepeda Motor", value: "Teknik dan Bisnis Sepeda Motor" },
+    { label: "Teknik Bodi Otomotif", value: "Teknik Bodi Otomotif" },
+  ];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -89,8 +134,8 @@ const StudentForm = () => {
     const newAddressData = { ...dataAlamat, [name]: value };
     setDataAlamat(newAddressData);
     const alamat_lengkap = `${newAddressData.alamat}, ${newAddressData.kecamatan}, ${newAddressData.kabupaten}, ${newAddressData.provinsi}`;
-    setFormData({ 
-      ...formData, 
+    setFormData({
+      ...formData,
       alamat_lengkap
     });
   };
@@ -100,8 +145,8 @@ const StudentForm = () => {
     const newAddressDataSekolah = { ...dataAlamatSekolah, [name]: value };
     setDataAlamatSekolah(newAddressDataSekolah);
     const alamat_sekolah = `${newAddressDataSekolah.alamatSekolah}, ${newAddressDataSekolah.kecamatanSekolah}, ${newAddressDataSekolah.kabupatenSekolah}, ${newAddressDataSekolah.provinsiSekolah}`;
-    setFormData({ 
-      ...formData, 
+    setFormData({
+      ...formData,
       alamat_sekolah
     });
   };
@@ -110,19 +155,32 @@ const StudentForm = () => {
     e.preventDefault();
     const accessToken = Cookies.get('access_token');
     try {
-        const updatedFormData = { ...formData, lokasi: location };
+      if(!data){
+      const addFormData = { ...formData, lokasi: location };
 
-        const response = await axios.post('http://localhost:5000/api/simparu/siswa/add', updatedFormData, {
+      const response = await axios.post('http://localhost:5000/api/simparu/siswa/add', addFormData, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        }
+      });
+      console.log('Siswa added:', response.data);
+      alert('Data siswa berhasil ditambahkan');
+      window.location.reload();
+      }else{
+        const editFormData = { ...formData};
+        // console.log('Siswa updated:', editFormData);
+        const response = await axios.patch(`http://localhost:5000/api/simparu/siswa/edit/${data._id}`, editFormData, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
           }
         });
-        console.log('Siswa added:', response.data);
-        alert('Data siswa berhasil ditambahkan');
+        alert('Data siswa berhasil di update');
         window.location.reload();
+      }
     } catch (error) {
-      console.error('Error adding siswa:', error);
+      console.error('Terjadi kesalahan:', error);
     }
   };
 
@@ -195,7 +253,7 @@ const StudentForm = () => {
           </div>
           <div className="field  mt-3">
             <label className="block text-sm font-medium mb-2">Email Sekolah</label>
-            <InputText name="email" value={formData.emailSekolah} onChange={handleChange} className="w-full" />
+            <InputText name="email" value={formData.email} onChange={handleChange} className="w-full" />
           </div>
           <div className="field">
             <label className="block text-sm font-medium mb-2">Alamat Sekolah Asal</label>
@@ -231,15 +289,16 @@ const StudentForm = () => {
           </div>
           <div className="field mt-3">
             <label className="block text-sm font-medium mb-2">Jurusan yang dipilih</label>
+            {/* <span>{formData.jurusan}</span> */}
             <Dropdown name="jurusan" value={formData.jurusan} options={jurusanOption} onChange={handleChange} className="w-full" placeholder="Pilih Jurusan" />
           </div>
         </div>
       </div>
       <div className='flex justify-center mt-6'>
         <div className="w-full">
-          <Button 
-            label='Simpan'  
-            className='p-button-info w-full h-10 shadow-xl drop-shadow-lg' 
+          <Button
+            label='Simpan'
+            className='p-button-info w-full h-10 shadow-xl drop-shadow-lg'
           />
         </div>
       </div>
