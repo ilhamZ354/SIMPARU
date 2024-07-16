@@ -171,15 +171,14 @@ const SekolahKepsek = () =>{
                                 selection={selectedSekolah}
                                 onSelectionChange={(e) => setSelectedSekolah(e.value)}
                                 dataKey="id"
-                                rows={10}
+                                rows={20}
                                 paginator 
                                 paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
                                 currentPageReportTemplate="{first} to {last} of {totalRecords}" paginatorLeft={paginatorLeft} paginatorRight={paginatorRight}
                                 scrollable scrollHeight="flex" tableStyle={{ minWidth: '100%' }}>
                                     <Column field="no" header="No" body={nomorKolom} sortable style={{maxWidth:'3rem'}}></Column>
-                                    <Column field="nama_sekolah" header="Nama" style={{minWidth:'8rem'}}></Column>
+                                    <Column field="nama_sekolah" header="Nama" style={{minWidth:'10rem'}}></Column>
                                     <Column field="alamat_sekolah" header="Alamat" style={{minWidth:'12rem'}}></Column>
-                                    <Column field="email" header="Email" style={{minWidth:'13rem'}}></Column>
                                     <Column field="total_siswa" header="Total" sortable style={{maxWidth:'6rem'}}></Column>
                                 </DataTable>
                             </div>

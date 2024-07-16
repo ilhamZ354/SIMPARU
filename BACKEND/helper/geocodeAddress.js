@@ -13,7 +13,7 @@ const geocodeAddress = async (address) => {
       },
     });
 
-    console.log('Google Maps API response:', response.data);
+    console.log('Google Maps API response:', response);
 
     if (response.data.status === 'OK') {
       const { lat, lng } = response.data.results[0].geometry.location;

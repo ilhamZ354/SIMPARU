@@ -8,9 +8,10 @@ const geocodeAddress = require('../helper/geocodeAddress');
 
 const excelUpload = async (req, res) => {
   try {
-    function convertExcelDate(excelDate) {
-      const jsDate = new Date((excelDate - (25567 + 1)) * 86400 * 1000);
-      return jsDate.toLocaleDateString('id-ID');
+    function convertExcelDate(dateString) {
+      const [day, month, year] = dateString.split('/');
+      const jsDate = new Date(`${year}-${month}-${day}`);
+      return jsDate; // Return the JavaScript Date object directly
     }
 
     const file = req.file;
@@ -33,9 +34,10 @@ const excelUpload = async (req, res) => {
     });
 
     for (const item of newData) {
+      const alamat = item.ALAMAT+', '+item.KECAMATAN+', '+item.KABUPATEN+', '+item.PROVINSI;
+
       const siswa = new Siswa({
         nama: item.NAMA,
-        nipd: item.NIPD,
         nisn: item.NISN,
         jenis_kelamin: item.JK === 'L' ? 'Laki-laki' : item.JK === 'P' ? 'Perempuan' : '',
         tempat_lahir: item.TEMPAT_LAHIR,
@@ -43,7 +45,8 @@ const excelUpload = async (req, res) => {
         telepon: item.TELEPON,
         tanggal_lahir: item.TANGGAL_LAHIR,
         agama: item.AGAMA,
-        alamat_lengkap: item.ALAMAT,
+        tahun: item.ANGKATAN,
+        alamat_lengkap: alamat,
         orangtua: {
           ayah: {
             nama: item.NAMA_AYAH,
@@ -55,16 +58,6 @@ const excelUpload = async (req, res) => {
         nilai: item.NILAI_AKHIR,
       });
 
-      const alamat = siswa.alamat_lengkap;
-      let hasAlamat = await Siswa.findOne({ alamat });
-
-      if (!hasAlamat) {
-        siswa.lokasi = await geocodeAddress(alamat);
-      } else {
-        siswa.lokasi = hasAlamat.lokasi;
-      }
-
-      // Save siswa first without sekolahAsal and rombel references
       await siswa.save();
 
       const rombel = new Rombel({
@@ -74,11 +67,15 @@ const excelUpload = async (req, res) => {
       await rombel.save();
 
       const alamat_sekolah = item.ALAMAT_SEKOLAH;
+      const namaSekolah = item.SEKOLAH_ASAL;
+
+      const param = namaSekolah+', '+alamat_sekolah;
+
       let lokasiSekolah;
-      let hasAlamatSekolah = await SekolahAsal.findOne({ alamat_sekolah });
+      let hasAlamatSekolah = await SekolahAsal.findOne({ namaSekolah });
 
       if (!hasAlamatSekolah) {
-        lokasiSekolah = await geocodeAddress(alamat_sekolah);
+        lokasiSekolah = await geocodeAddress(param);
       } else {
         lokasiSekolah = hasAlamatSekolah.lokasi;
       }
@@ -92,7 +89,6 @@ const excelUpload = async (req, res) => {
       });
       await sekolahAsal.save();
 
-      // Update siswa with references to rombel and sekolahAsal
       siswa.rombel = rombel._id;
       siswa.sekolahAsal = sekolahAsal._id;
 

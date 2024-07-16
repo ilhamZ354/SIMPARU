@@ -146,7 +146,7 @@ const Siswa = () => {
                                 selection={selectedSiswa}
                                 onSelectionChange={(e) => setSelectedSiswa(e.value)}
                                 dataKey="_id"
-                                rows={10}
+                                rows={100}
                                 paginator 
                                 paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
                                 currentPageReportTemplate="{first} to {last} of {totalRecords}" paginatorLeft={paginatorLeft} paginatorRight={paginatorRight}

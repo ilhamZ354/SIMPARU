@@ -9,25 +9,13 @@ const inputSiswa = async (req, res) => {
         return res.status(400).send({ error: 'Kamu tidak bisa melakukan tambah data siswa' });
     }
     try {
-        const { alamat_lengkap, jurusan, nama_sekolah, email, alamat_sekolah, ...rest } = req.body;
-        let lokasi;
+        const { jurusan, nama_sekolah, email, alamat_sekolah, ...rest } = req.body;
 
-        console.log({ alamat_lengkap})
-        // Cek apakah alamat sudah ada di database
-        let hasAlamat = await Siswa.findOne({ alamat_lengkap });
-        
-        if (!hasAlamat) {
-            console.log('alamat siswa belum ada, panggil API')
-            lokasi = await geocodeAddress(alamat_lengkap);
-        } else {
-            console.log('alamat siswa sudah ada, tidak perlu panggil API')
-            lokasi = hasAlamat.lokasi;
-        }
+        // const bagiAlamat = alamat_lengkap.split(', ')
+        // const updateAlamat = bagiAlamat.slice(1).join(', ');
 
         const siswa = new Siswa({
             ...rest,
-            alamat_lengkap,
-            lokasi
         });
         await siswa.save();
 
@@ -40,13 +28,14 @@ const inputSiswa = async (req, res) => {
 
         //sekolah asal
         let lokasiSekolah;
-        let hasAlamatSekolah = await SekolahAsal.findOne({ alamat_sekolah });
+        let hasAlamatSekolah = await SekolahAsal.findOne({ nama_sekolah });
         
+        const param = nama_sekolah+alamat_sekolah
         if (!hasAlamatSekolah) {
-            console.log('alamat sekolah belum ada, panggil API')
-            lokasiSekolah = await geocodeAddress(alamat_sekolah);
+            console.log('lokasi sekolah belum ada, panggil API')
+            lokasiSekolah = await geocodeAddress(param);
         } else {
-            console.log('alamat sekolah sudah ada, tidak perlu panggil API')
+            console.log('lokasi sekolah sudah ada, tidak perlu panggil API')
             lokasiSekolah = hasAlamatSekolah.lokasi;
         }
 
@@ -57,6 +46,7 @@ const inputSiswa = async (req, res) => {
             alamat_sekolah,
             lokasi : lokasiSekolah
         });
+
         await sekolahAsal.save();
 
         siswa.rombel = rombelSiswa._id; 
@@ -146,29 +136,16 @@ const editSiswaById = async (req, res) => {
 
     try {
         const { id } = req.params;
-        const { alamat_lengkap, jurusan, nama_sekolah, email, alamat_sekolah, ...rest } = req.body;
+        const { jurusan, nama_sekolah, email, alamat_sekolah, ...rest } = req.body;
 
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(404).json({ error: 'ID tidak valid' });
-        }
-
-        let lokasi;
-        let hasAlamat = await Siswa.findOne({ alamat_lengkap });
-
-        if (!hasAlamat) {
-            console.log('Alamat siswa belum ada, panggil API');
-            lokasi = await geocodeAddress(alamat_lengkap);
-        } else {
-            console.log('Alamat siswa sudah ada, tidak perlu panggil API');
-            lokasi = hasAlamat.lokasi;
         }
 
         const ubahSiswa = await Siswa.findOneAndUpdate(
             { _id: id },
             {
                 ...rest,
-                alamat_lengkap,
-                lokasi,
             },
             { new: true }
         );
@@ -184,11 +161,13 @@ const editSiswaById = async (req, res) => {
         );
 
         let lokasiSekolah;
-        let hasAlamatSekolah = await SekolahAsal.findOne({ alamat_sekolah });
+        let hasAlamatSekolah = await SekolahAsal.findOne({ nama_sekolah });
+
+        const param = nama_sekolah+alamat_sekolah
 
         if (!hasAlamatSekolah) {
             console.log('Alamat sekolah belum ada, panggil API');
-            lokasiSekolah = await geocodeAddress(alamat_sekolah);
+            lokasiSekolah = await geocodeAddress(param);
         } else {
             console.log('Alamat sekolah sudah ada, tidak perlu panggil API');
             lokasiSekolah = hasAlamatSekolah.lokasi;

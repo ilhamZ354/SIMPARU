@@ -7,15 +7,8 @@ const siswaSchema = new Schema({
         type: String,
         required: true
     },
-    nipd: {
-        type: String,
-        unique: true,
-        required: true
-    },
     nisn: {
         type: String,
-        unique: true,
-        required: true
     },
     jenis_kelamin: {
         type: String,
@@ -31,8 +24,6 @@ const siswaSchema = new Schema({
     },
     nik: {
         type: String,
-        unique: true,
-        required: true
     },
     agama: {
         type: String,
@@ -41,22 +32,14 @@ const siswaSchema = new Schema({
         type: String,
         required: true
     },
-    lokasi: {
-        type: {
-          type: String,
-          enum: ['Point'],
-          default: 'Point'
-        },
-        coordinates: {
-          type: [Number],
-        },
-    },
     telepon: {
         type: String,
-        unique: true,
-        required: true
     },
     nilai: {
+        type: Number,
+        required: true
+    },
+    tahun: {
         type: Number,
         required: true
     },
@@ -64,13 +47,11 @@ const siswaSchema = new Schema({
         ayah: {
             nama: {
                 type: String,
-                required: true
             },
         },
         ibu: {
             nama: {
                 type: String,
-                required: true
             },
         }
     },

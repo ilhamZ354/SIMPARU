@@ -12,8 +12,8 @@ const GeografisSekolahOwner = () => {
     },
     {
       "id": 2,
-      "name": "SMP Negeri 3 Kisaran",
-      "position": {lat: 2.9801779978758063, lng: 99.63782880793916},
+      "name": "MTS Negeri 1 Asahan",
+      "position": {lat: 3.0675435, lng: 99.65058909999999},
     }
   ];
 

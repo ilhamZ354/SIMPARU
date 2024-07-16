@@ -27,7 +27,6 @@ const StudentForm = ({ data }) => {
 
   const [formData, setFormData] = useState({
     nama: '',
-    nipd: '',
     nisn: '',
     jenis_kelamin: '',
     tempat_lahir: '',
@@ -56,7 +55,6 @@ const StudentForm = ({ data }) => {
       console.log("Received data:", data);
       setFormData({
         nama: data.nama || '',
-        nipd: data.nipd || '',
         nisn: data.nisn || '',
         jenis_kelamin: data.jenis_kelamin || '',
         tempat_lahir: data.tempat_lahir || '',
@@ -196,10 +194,6 @@ const StudentForm = ({ data }) => {
           <div className="field">
             <label className="block text-sm font-medium mb-2">NISN</label>
             <InputText name="nisn" value={formData.nisn} onChange={handleChange} className="w-full" />
-          </div>
-          <div className="field">
-            <label className="block text-sm font-medium mb-2">NIPD</label>
-            <InputText name="nipd" value={formData.nipd} onChange={handleChange} className="w-full" />
           </div>
           <div className="field">
             <label className="block text-sm font-medium mb-2">Jenis Kelamin</label>
