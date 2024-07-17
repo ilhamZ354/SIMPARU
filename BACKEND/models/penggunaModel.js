@@ -37,6 +37,10 @@ const penggunaSchema = new Schema({
     photourl: {
         type: String,
     },
+    saran: {
+        type: Schema.Types.ObjectId,
+        ref: 'Saran',
+    },
     tokens: [
         {
           token: {

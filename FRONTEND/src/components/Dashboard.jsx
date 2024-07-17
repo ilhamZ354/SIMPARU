@@ -16,7 +16,14 @@ import { useState } from 'react';
 import Bar from '../components/charts/Bar';
 import Cookies from 'js-cookie';
 
-const Dashboard = (user) =>{
+const Dashboard = ({ siswaData }) =>{
+
+    console.log(siswaData);
+    const defaultData = { TBSM: 0, TKJ: 0, TBO: 0, TAV: 0 };
+    const dataJurusan = siswaData.jurusanCount ? siswaData.jurusanCount : defaultData;
+
+    const defaultSiswaBaru = { };
+    const totalSiswaBaru = siswaData.dataSiswaBaru ? siswaData.dataSiswaBaru : defaultSiswaBaru;
 
     const userLogin = Cookies.get('user');
     const jurusan = [
@@ -46,7 +53,7 @@ const Dashboard = (user) =>{
                                             <FaCaretUp className='text-green-600' style={{height:'2em'}}/>
                                             <span className='ml-2 mt-1 text-slate-500 text-xs'>Angka kenaikan</span>
                                         </div>
-                                        <span className='text-slate-700 text-2xl font-bold'>0%</span>
+                                        <span className='text-slate-700 text-2xl font-bold'>{siswaData.totalKenaikan}</span>
                                     </div>
                                 </div>
                             </Card>
@@ -62,7 +69,7 @@ const Dashboard = (user) =>{
                                                 <FaCaretDown className='text-rose-600' style={{height:'2em'}}/>
                                                 <span className='ml-2 mt-1 text-slate-500 text-xs'>Angka penurunan</span>
                                             </div>
-                                            <span className='text-slate-700 text-2xl font-bold'>10%</span>
+                                            <span className='text-slate-700 text-2xl font-bold'>{siswaData.totalPenurunan}</span>
                                         </div>
                                     </div>
                                 </Card>
@@ -75,7 +82,7 @@ const Dashboard = (user) =>{
                                         </div>
                                         <div className='flex flex-col m-2'>
                                             <span className='mt-1 text-slate-500 text-xs'>Laki-laki</span>
-                                            <span className='text-slate-700 text-2xl font-bold'>562</span>
+                                            <span className='text-slate-700 text-2xl font-bold'>{siswaData.totalLakiLaki}</span>
                                         </div>
                                     </div>
                                 </Card>
@@ -88,7 +95,7 @@ const Dashboard = (user) =>{
                                         </div>
                                         <div className='flex flex-col m-2'>
                                             <span className='mt-1 text-slate-500 text-xs'>Perempuan</span>
-                                            <span className='text-slate-700 text-2xl font-bold'>447</span>
+                                            <span className='text-slate-700 text-2xl font-bold'>{siswaData.totalPerempuan}</span>
                                         </div>
                                     </div>
                                 </Card>
@@ -103,15 +110,15 @@ const Dashboard = (user) =>{
                                 <div className='flex flex-row m-3'>
                                     <div className='w-2/3 border border-slate-300 rounded-xl bg-sky-700'>
                                         <Line
-                                        data={['2019', '2020', '2021', '2022', '2023']}
-                                        dataValue={[675, 640, 580, 500, 473]}
+                                        data={Object.keys(totalSiswaBaru)}
+                                        dataValue={Object.values(totalSiswaBaru)}
                                         style={{ height: "210px", width:'100%', marginLeft:"2px", marginTop: "3px", marginBottom: "5px" }}
                                         />
                                     </div>
                                     <div className='w-1/3 bg-sky-50 ml-2 rounded-xl'>
                                         <div className='flex flex-col justify-center'>
-                                            <span className='text-center mt-3 text-xl font-semibold text-sky-800'>Jumlah siswa 2023</span>
-                                            <div className='text-center text-3xl mt-2 border-4 border-sky-800 rounded-lg m-4 bg-sky-800'><span className='m-2 text-white text-bold'>1009</span></div>
+                                            <span className='text-center mt-3 text-xl font-semibold text-sky-800'>Jumlah total siswa</span>
+                                            <div className='text-center text-3xl mt-2 border-4 border-sky-800 rounded-lg m-4 bg-sky-800'><span className='m-2 text-white text-bold'>{siswaData.totalSiswa}</span></div>
                                             <img className='mx-12' src={Roket} alt="gambarroket" style={{height:'6em', width:'6em'}} />
                                         </div>
                                     </div>
@@ -121,7 +128,7 @@ const Dashboard = (user) =>{
                         <div className='w-1/3'>
                             <Card title='card 2' className='shadow-lg w-full'>
                             <span className='text-slate-400 font-sans text-xs ml-3 mt-2'>Rasio nilai rata-rata siswa baru</span>
-                                <Radial/>
+                                <Radial data={siswaData.rata_rata_nilai}/>
                             </Card>
                         </div>
                     </div>
@@ -134,6 +141,7 @@ const Dashboard = (user) =>{
                                 <div className='flex flex-col m-3'>
                                     <div className='flex w-full rounded-2xl bg-white mt-1 border border-slate-200'>
                                         <Rightbar
+                                        data={dataJurusan}
                                         style={{ height: '310px', width: '642px', marginTop:"-40px", marginBottom: "-30px"}}
                                         />
                                     </div>
@@ -146,7 +154,7 @@ const Dashboard = (user) =>{
                                                 </div>
                                                 <div className='flex flex-col m-2'>
                                                     <span className='text-sky-400 text-xl font-mono'>TKJ</span>
-                                                    <span className='text-rose-500 text-2xl font-bold'>65</span>
+                                                    <span className='text-rose-500 text-2xl font-bold'>{Object.values(dataJurusan)[1]}</span>
                                                 </div>
                                             </div>
                                             </Card>
@@ -159,7 +167,7 @@ const Dashboard = (user) =>{
                                                 </div>
                                                 <div className='flex flex-col m-2'>
                                                     <span className='text-sky-400 text-xl font-mono'>TBSM</span>
-                                                    <span className='text-rose-500 text-2xl font-bold'>80</span>
+                                                    <span className='text-rose-500 text-2xl font-bold'>{Object.values(dataJurusan)[0]}</span>
                                                 </div>
                                             </div>
                                             </Card>
@@ -172,7 +180,7 @@ const Dashboard = (user) =>{
                                                 </div>
                                                 <div className='flex flex-col m-2'>
                                                     <span className='text-sky-400 text-xl font-mono'>TAV</span>
-                                                    <span className='text-rose-500 text-2xl font-bold'>25</span>
+                                                    <span className='text-rose-500 text-2xl font-bold'>{Object.values(dataJurusan)[2]??Object.values(dataJurusan)[3]}</span>
                                                 </div>
                                             </div>
                                             </Card>
@@ -185,7 +193,7 @@ const Dashboard = (user) =>{
                                                 </div>
                                                 <div className='flex flex-col m-2'>
                                                     <span className='text-sky-400 text-xl font-mono'>TBO</span>
-                                                    <span className='text-rose-500 text-2xl font-bold'>34</span>
+                                                    <span className='text-rose-500 text-2xl font-bold'>{Object.values(dataJurusan)[3]??'0'}</span>
                                                 </div>
                                             </div>
                                             </Card>

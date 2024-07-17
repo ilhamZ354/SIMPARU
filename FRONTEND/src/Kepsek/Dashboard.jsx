@@ -1,9 +1,9 @@
 import Dashboard from "../components/Dashboard";
 
-const DashboardKepsek = () =>{
+const DashboardKepsek = ({ siswaData }) => {
 
-    return(
-        <Dashboard/>
+    return (
+        <Dashboard siswaData={siswaData} />
     );
 };
 

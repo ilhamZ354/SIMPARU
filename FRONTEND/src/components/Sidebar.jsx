@@ -314,7 +314,7 @@ import { Link } from 'react-router-dom';
                 </ListItem>
                 </Link>
                 <Link to="/geografis-sekolah">
-                <ListItem className={`${(active=='geografis') ? 'bg-slate-100':'bg-white'} hover:bg-sky-50`}>
+                <ListItem className={`${(active=='geografis-sekolah') ? 'bg-slate-100':'bg-white'} hover:bg-sky-50`}>
                   <ListItemPrefix>
                     <ChevronRightIcon  strokeWidth={3} className="h-4 w-4" />
                   </ListItemPrefix>
@@ -446,7 +446,7 @@ import { Link } from 'react-router-dom';
                 </ListItem>
                 </Link>
                 <Link to="/kepala-sekolah/geografis-sekolah">
-                <ListItem className={`${(active=='geografis') ? 'bg-slate-100':'bg-white'} hover:bg-sky-50`}>
+                <ListItem className={`${(active=='geografis-sekolah') ? 'bg-slate-100':'bg-white'} hover:bg-sky-50`}>
                   <ListItemPrefix>
                     <ChevronRightIcon  strokeWidth={3} className="h-4 w-4" />
                   </ListItemPrefix>

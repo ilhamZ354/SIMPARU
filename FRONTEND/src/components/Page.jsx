@@ -3,10 +3,7 @@ import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 
-const Page = (props) => {
-  const active = props.active;
-  const title = props.title;
-  const page = props.page;
+const Page = ({active, title, page, setSiswaData}) => {
 
   return (
     <div className="bg-stone-50">
@@ -18,7 +15,7 @@ const Page = (props) => {
         <div className="w-10/12 flex flex-col">
           {/* navbar */}
           <div className="sticky top-0 z-50 -ml-2">
-            <Navbar />
+            <Navbar setSiswaData={setSiswaData}/>
           </div>
           <div className="flex-grow overflow-y-auto">
             {page}

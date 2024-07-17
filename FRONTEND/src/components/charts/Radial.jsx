@@ -1,6 +1,6 @@
 import Chart from "react-apexcharts";
 
-const Radial = () => {
+const Radial = ({data}) => {
 
     const options6 = {
         chart: {
@@ -41,7 +41,7 @@ const Radial = () => {
         stroke: {
           dashArray: 2
         },
-        series: [82],
+        series: [data],
         labels: ["Rata-rata"]
       };
 

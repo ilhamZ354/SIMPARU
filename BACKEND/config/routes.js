@@ -34,10 +34,13 @@ const { getSekolahAsalData } = require ('../controllers/sekolahAsalController')
 
 const multer = require('multer')
 
-const { verify, verifyAdmin, verifySuperAdmin,verifyAdminKepsekGuru } = require('./middleware');
+const { verify, verifyAdmin, verifySuperAdmin,verifyAdminKepsekGuru, verifyGuru, verifyKepsek } = require('./middleware');
 const { excelUpload } = require('../controllers/uploadFileExcel');
 const { updateProfilePhoto, hapusPhoto } = require('../controllers/uploadPhotoController')
-const { upload } = require('../config/middleware')
+const { upload } = require('../config/middleware');
+const { getDataSiswa } = require('../controllers/dataSiswaController');
+const { createSaran, getAllSarans, getSaranMe, updateSaranById, deleteSaranById } = require('../controllers/saranController');
+const { createKeputusan, getAllKeputusan, getKeputusanById, updateKeputusanById, deleteKeputusanById } = require('../controllers/keputusanController');
 
 const BASE_URL = '/api/simparu'
 
@@ -48,6 +51,8 @@ module.exports = (app) => {
     app.post(`${BASE_URL}/logout`,logout );
     app.get(`${BASE_URL}/user/me`, verify, getProfile );
     app.patch(`${BASE_URL}/password/me`, verify, editPassword );
+
+    app.get(`${BASE_URL}/datasiswa/:tahun`, getDataSiswa )
     
     //hanya super admin
     // app.post(`${BASE_URL}/super-admin/regis`, regisSuperAdmin)
@@ -55,6 +60,12 @@ module.exports = (app) => {
     app.get(`${BASE_URL}/kepsek`, verifySuperAdmin, getKepsek );
     app.delete(`${BASE_URL}/kepsek/hapus`, verifySuperAdmin, deleteKepsek );
     app.patch(`${BASE_URL}/kepsek/edit/:id`,verifySuperAdmin, editKepsek );
+
+    app.post(`${BASE_URL}/keputusan/buat`, verifyKepsek, createKeputusan );
+    app.get(`${BASE_URL}/keputusans`, verifyAdminKepsekGuru, getAllKeputusan );
+    app.get(`${BASE_URL}/keputusan/:id`, verifyAdminKepsekGuru, getKeputusanById );
+    app.patch(`${BASE_URL}/keputusan/update/:id`, verifyKepsek, updateKeputusanById );
+    app.delete(`${BASE_URL}/keputusan/delete/:id`, verifyKepsek, deleteKeputusanById );
 
     app.post(`${BASE_URL}/admin/regis`, verifySuperAdmin, regisAdmin );
     app.get(`${BASE_URL}/admins`, verifySuperAdmin, getAdmins );
@@ -76,6 +87,13 @@ module.exports = (app) => {
     app.get(`${BASE_URL}/siswa/:id`, verifyAdmin, getSiswaById)
     app.delete(`${BASE_URL}/siswa/hapus/:id`, verifyAdmin, deleteSiswaById)
     app.patch(`${BASE_URL}/siswa/edit/:id`, verifyAdmin, editSiswaById)
+
+    //guru
+    app.post(`${BASE_URL}/saran/send`, verifyGuru, createSaran)
+    app.get(`${BASE_URL}/sarans`, verifyAdminKepsekGuru, getAllSarans)
+    app.get(`${BASE_URL}/saran/me`, verifyGuru, getSaranMe)
+    app.patch(`${BASE_URL}/saran/status-edit/:id`, verifyGuru, updateSaranById)
+    app.delete(`${BASE_URL}/saran/delete/:id`, verifyGuru, deleteSaranById );
 
     //sekolah asal
     app.get(`${BASE_URL}/sekolah-asal.json`, verifyAdminKepsekGuru , getSekolahAsalData)

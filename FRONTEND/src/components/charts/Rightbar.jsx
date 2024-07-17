@@ -1,8 +1,8 @@
 import ReactEcharts from "echarts-for-react";
 
-const Rightbar = (props) => {
-    const style = props.style;
+const Rightbar = ({style, data}) => {
 
+    console.log(data)
     const options7 = {
         tooltip: {
             show: true,
@@ -19,14 +19,14 @@ const Rightbar = (props) => {
         },
         yAxis: {
             type: 'category',
-            data: ['TKJ','TBSM','TAV', 'TBO'],
+            data: Object.keys(data),
             axisLabel: {
                 fontSize: 8
             }
         },
         series: [{
             type: 'bar',
-            data: [34, 45, 23, 33],
+            data: Object.values(data),
             label: {
                 show: true,
                 position: 'inside',

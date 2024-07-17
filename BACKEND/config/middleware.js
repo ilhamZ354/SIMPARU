@@ -90,6 +90,23 @@ const verifyKepsek = async (req, res, next) => {
     }
   };
 
+  const verifyGuru = async (req, res, next) => {
+    try {
+      const token = req.header('Authorization').replace('Bearer ', '');
+      const decoded = jwt.verify(token, process.env.ACCESS_TOKEN);
+      const user = await User.findOne({
+        _id: decoded._id,
+        'tokens.token': token,
+      });
+      if (user.level !=='guru') throw new Error();
+      req.token = token;
+      req.user = user;
+      next();
+    } catch (e) {
+      res.status(401).send({ error: 'Silakan login terlebih dahulu.' });
+    }
+  };
+
   const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'uploads/images/')
@@ -105,4 +122,4 @@ const upload = multer({
   storage: storage,
 }).single('photo');
   
-module.exports = { verify, verifySuperAdmin, verifyAdminKepsekGuru, verifyKepsek, verifyAdmin, upload };
+module.exports = { verify, verifySuperAdmin, verifyAdminKepsekGuru, verifyKepsek, verifyAdmin, verifyGuru, upload };

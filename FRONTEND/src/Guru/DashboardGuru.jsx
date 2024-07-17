@@ -1,9 +1,9 @@
 import Dashboard from "../components/Dashboard";
 
-const DashboardGuru = () =>{
+const DashboardGuru = ({ siswaData }) =>{
 
     return(
-        <Dashboard/>
+        <Dashboard siswaData={siswaData}/>
     );
 };
 
