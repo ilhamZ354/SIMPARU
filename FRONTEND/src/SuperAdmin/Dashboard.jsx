@@ -1,9 +1,9 @@
 import Dashboard from "../components/Dashboard";
 
-const DashboardSuperAdmin = () =>{
+const DashboardSuperAdmin = ({ siswaData }) =>{
 
     return(
-        <Dashboard/>
+        <Dashboard siswaData={siswaData}/>
     );
 };
 

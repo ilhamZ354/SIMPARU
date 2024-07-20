@@ -56,7 +56,7 @@ function App() {
   const sekolahGuru = <SekolahGuru/>
   const geoSekolahGuru = <GeografisSekolahGuru/>
   const umpanBalikGuru = <UmpanBalikGuru/>
-  const dashboardSuperAdmin = <DashboardSuperAdmin />
+  const dashboardSuperAdmin = <DashboardSuperAdmin siswaData={siswaData} />
   const kepsek = <Kepsek/>
   const admin = <Admin/>
   const guru = <Guru/>
@@ -67,7 +67,7 @@ function App() {
         <Route path="/" element={<Login />} />
 
         {/* super admin */}
-        <Route path="/super-admin/dashboard" element={<Pages title="super-admin" active='dashboard' page={dashboardSuperAdmin} />} />
+        <Route path="/super-admin/dashboard" element={<Pages setSiswaData={setSiswaData} title="super-admin" active='dashboard' page={dashboardSuperAdmin} />} />
         <Route path="/super-admin/kepsek" element={<Pages title="super-admin" active='kepsek' page={kepsek} />} />
         <Route path="/super-admin/admin" element={<Pages title="super-admin" active='admin' page={admin} />} />
         <Route path="/super-admin/guru" element={<Pages title="super-admin" active='guru' page={guru} />} />
