@@ -7,9 +7,11 @@ const Geografis = (props) => {
     const zoom = props.zoom
     const style = props.style
 
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAP_API_KEY
-  });
+    const libraries = ['visualization', 'maps']
+    const { isLoaded } = useJsApiLoader({
+      googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAP_API_KEY,
+      libraries,
+    });
   
   return(
         isLoaded ? (

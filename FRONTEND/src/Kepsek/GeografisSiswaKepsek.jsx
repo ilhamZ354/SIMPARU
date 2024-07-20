@@ -1,30 +1,22 @@
 import {React, Fragment, useState } from 'react';
 import { Dropdown } from 'primereact/dropdown';
-import Geografis from '../components/Geografis';
+import GeografisHeatmap from '../components/GeografisHeatmap';
 
 const GeografisSiswaKepsek = () => {
 
   const wilayah = [
-    {
-      "id": 1,
-      "name": "Kisaran Timur",
-      "position": {lat: 2.990639468544672, lng: 99.63609799297191},
-    },
-    {
-      "id": 2,
-      "name": "Rawang Panca Arga",
-      "position": {lat: 3.053888381252676, lng: 99.64377014515391},
-    },
-    {
-        "id": 3,
-        "name": "Kisaran Barat",
-        "position": {lat: 3.0011081260222237, lng: 99.59511192244923},
-      },
-      {
-        "id": 2,
-        "name": "Pulo Bandring",
-        "position": {lat: 3.00319258878201, lng: 99.55302577636752},
-      },
+    {lat: 2.9801779978758063, lng: 99.63782880793916},
+    {lat: 2.9801779978758063, lng: 99.63782880793916},
+    {lat: 2.9801779978758063, lng: 99.63782880793916},
+    {lat: 2.9801779978758063, lng: 99.63782880793916},
+    {lat: 2.9801779978758063, lng: 99.63782880793916},
+    {lat: 2.9801779978758063, lng: 99.63782880793916},
+    {lat: 2.9801779978758063, lng: 99.63782880793916},
+    {lat: 2.9801779978758063, lng: 99.63782880793916},
+    {lat: 2.9801779978758063, lng: 99.63782880793916},
+    {lat: 2.9801779978758063, lng: 99.63782880793916},
+    {lat: 2.9801779978758063, lng: 99.63782880793916},
+    {lat: 2.9801779978758063, lng: 99.63782880793916},
   ];
 
   const mapWilayah = [
@@ -50,7 +42,7 @@ const GeografisSiswaKepsek = () => {
           />
         </div>
         <div style={{width:'98%', height:'90vh', marginLeft:'4px'}}>
-          <Geografis
+          <GeografisHeatmap
             center={pointCenter}
             zoom={13}
             style={{width:"100%",height:"90vh"}}

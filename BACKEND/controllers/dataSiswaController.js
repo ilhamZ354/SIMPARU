@@ -5,7 +5,7 @@ const mongoose = require('mongoose')
 
 const getDataSiswa = async (req, res) => {
     try {
-        const year = req.params.tahun;
+      const year = req.params.tahun;
       const currentYear = parseInt(year, 10);
       const previousYear = currentYear - 1;
 
@@ -58,7 +58,30 @@ const getDataSiswa = async (req, res) => {
         return count;
       }, {});
 
-      const startYear = 2021; // Atur tahun awal sesuai dengan kebutuhan
+      const dataAlamat = siswaData.reduce((count, siswa) => {
+        let alamat = siswa.alamat_lengkap;
+
+        let result = alamat.split(", ");
+        let alamatSiswa = result[1];
+
+        // console.log(alamatSiswa)
+        
+        count[alamatSiswa] = (count[alamatSiswa] || 0) + 1;
+        return count;
+      }, {})
+
+      let sortAlamat = [];
+      for (let alamat in dataAlamat) {
+        sortAlamat.push([alamat, dataAlamat[alamat]]);
+      }
+      sortAlamat.sort((a, b) => b[1] - a[1]);
+
+      let sortedDataAlamat = {};
+      sortAlamat.forEach(item => {
+        sortedDataAlamat[item[0]] = item[1];
+      });
+
+      const startYear = 2021;
       const dataSiswaBaru = {};
       for (let i = startYear; i <= currentYear; i++) {
           const siswaTahun = await Siswa.countDocuments({ tahun: i });
@@ -75,6 +98,7 @@ const getDataSiswa = async (req, res) => {
         totalPerempuan,
         rata_rata_nilai: Math.round(rataRataNilai),
         jurusanCount,
+        dataAlamat: sortedDataAlamat,
         dataSiswaBaru
       });
     } catch (error) {

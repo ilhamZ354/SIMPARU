@@ -1,7 +1,6 @@
 import Chart from "react-apexcharts";
 
-const PieOption = (props) =>{
-    const style = props.style;
+const PieOption = ({ style, data}) =>{
 
     const options3 = {
         chart: {
@@ -18,8 +17,8 @@ const PieOption = (props) =>{
                 fontWeight: "bold"
             },
         },
-        series: [80, 123, 40, 165], 
-        labels: ['TAV', 'TKJ', 'TBO', 'TBSM'], 
+        series: Object.values(data), 
+        labels: Object.keys(data), 
         legend: {
             show: true,
             position: "bottom",

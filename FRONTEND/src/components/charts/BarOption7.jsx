@@ -58,7 +58,7 @@ const BarOption7 = (props) => {
         interval: interval,
         labels: {
             style: {
-                fontSize: '10px',
+                fontSize: '7px',
                 colors:'#fff'
             }
         }

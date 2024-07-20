@@ -43,7 +43,7 @@ function App() {
   const dashboardAdmin = <DashboardAdmin siswaData={siswaData} />
   const siswabaru = <Baru/>
   const siswa = <Siswa/>
-  const siswaKepsek = <SiswaKepsek/>
+  const siswaKepsek = <SiswaKepsek siswaData={siswaData}/>
   const umpanBalikAdmin = <UmpanBalik/>
   const dashboardOwner = <DashboardKepsek siswaData={siswaData}/>
   const umpanBalikKepsek = <UmpanBalikKepsek/>
@@ -81,7 +81,7 @@ function App() {
         {/* Kepala sekolah */}
         <Route path="/kepala-sekolah/dashboard" element={<Pages setSiswaData={setSiswaData} active="dashboard" title="kepala-sekolah" page={dashboardOwner} />} />
         <Route path="/kepala-sekolah/umpan-balik" element={<Pages active="umpanbalik" title="kepala-sekolah" page={umpanBalikKepsek} />} />
-        <Route path="/kepala-sekolah/siswa" element={<Pages active="siswa" title="kepala-sekolah" page={siswaKepsek} />} />
+        <Route path="/kepala-sekolah/siswa" element={<Pages setSiswaData={setSiswaData}siswaData={siswaData} active="siswa" title="kepala-sekolah" page={siswaKepsek} />} />
         <Route path="/kepala-sekolah/geografis-siswa" element={<Pages active="geografis-siswa" title="kepala-sekolah" page={geoSiswaOwner} />} />
         <Route path="/kepala-sekolah/sekolah" element={<Pages active="sekolah" title="kepala-sekolah" page={sekolahKepsek} />} />
         <Route path="/kepala-sekolah/geografis-sekolah" element={<Pages active="geografis-sekolah" title="kepala-sekolah" page={geoSekolahOwner} />} />
