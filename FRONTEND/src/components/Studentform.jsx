@@ -47,7 +47,8 @@ const StudentForm = ({ data }) => {
     },
     nama_sekolah: '',
     email: '',
-    alamat_sekolah: ''
+    alamat_sekolah: '',
+    tahun: ''
   });
 
   useEffect(() => {
@@ -75,7 +76,8 @@ const StudentForm = ({ data }) => {
         },
         nama_sekolah: data.sekolahAsal?.nama_sekolah || '',
         email: data.sekolahAsal?.email || '',
-        alamat_sekolah: data.sekolahAsal?.alamat_sekolah || ''
+        alamat_sekolah: data.sekolahAsal?.alamat_sekolah || '',
+        tahun: data.tahun || ''
       });
 
       const alamatParts = (data.alamat_lengkap || '').split(', ');
@@ -198,6 +200,10 @@ const StudentForm = ({ data }) => {
           <div className="field">
             <label className="block text-sm font-medium mb-2">Jenis Kelamin</label>
             <Dropdown name="jenis_kelamin" value={formData.jenis_kelamin} options={genderOptions} onChange={handleChange} className="w-full" placeholder="Pilih Jenis Kelamin" />
+          </div>
+          <div className="field">
+            <label className="block text-sm font-medium mb-2">Tahun Masuk</label>
+            <InputText name="tahun" value={formData.tahun} onChange={handleChange} className="w-full" />
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border-t-2 mt-6">

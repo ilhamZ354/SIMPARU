@@ -9,15 +9,27 @@ const inputSiswa = async (req, res) => {
         return res.status(400).send({ error: 'Kamu tidak bisa melakukan tambah data siswa' });
     }
     try {
-        const { jurusan, nama_sekolah, email, alamat_sekolah, ...rest } = req.body;
+        const { jurusan, nama_sekolah, alamat_lengkap, email, alamat_sekolah, ...rest } = req.body;
 
-        // const bagiAlamat = alamat_lengkap.split(', ')
-        // const updateAlamat = bagiAlamat.slice(1).join(', ');
+        const bagiAlamat = alamat_lengkap.split(', ');
+        const updateAlamat = bagiAlamat.slice(1).join(', ');
+
+        // Cek apakah alamat yang sama sudah ada di database
+        const cari = new RegExp(updateAlamat, 'i');
+        let hasAlamat = await Siswa.findOne({ alamat_lengkap: cari });
+        
+        if (!hasAlamat) {
+            lokasi = await geocodeAddress(updateAlamat);
+        } else {
+            console.log('alamat siswa sudah ada, tidak perlu panggil API')
+            lokasi = hasAlamat.lokasi;
+        }
 
         const siswa = new Siswa({
             ...rest,
+            alamat_lengkap,
+            lokasi
         });
-        await siswa.save();
 
         //rombel
         const rombelSiswa = new Rombel({
@@ -30,7 +42,7 @@ const inputSiswa = async (req, res) => {
         let lokasiSekolah;
         let hasAlamatSekolah = await SekolahAsal.findOne({ nama_sekolah });
         
-        const param = nama_sekolah+alamat_sekolah
+        const param = nama_sekolah+', '+alamat_sekolah
         if (!hasAlamatSekolah) {
             console.log('lokasi sekolah belum ada, panggil API')
             lokasiSekolah = await geocodeAddress(param);

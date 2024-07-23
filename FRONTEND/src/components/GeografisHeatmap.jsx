@@ -1,38 +1,47 @@
-import React, { useEffect, useRef } from 'react';
-import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
+import React, { useEffect } from 'react';
+import { MapContainer, TileLayer, useMap } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+import 'leaflet.heat';
 
-const GeografisHeatmap = ({ data, center, zoom, style }) => {
-  const mapRef = useRef(null);
-
-  const libraries = ['visualization', 'maps']
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAP_API_KEY,
-    libraries,
-  });
+const HeatmapLayer = ({ data }) => {
+  const map = useMap();
 
   useEffect(() => {
-    if (isLoaded && mapRef.current) {
-      const google = window.google;
+    const heatLayer = L.heatLayer(
+      data.map(({ lat, lng }) => [lat, lng]),
+      {
+        radius: 100,
+        blur: 20,
+        maxOpacity: 0.8,
+        minOpacity: 0.2,
+        gradient: {
+          0.1: 'blue',
+          0.2: 'lime',
+          0.3: 'yellow',
+          0.4: 'orange',
+          0.5: 'red'
+        }
+      }
+    ).addTo(map);
 
-      const heatmapData = data.map(({ lat, lng }) => new google.maps.LatLng(lat, lng));
-      
-      const heatmap = new google.maps.visualization.HeatmapLayer({
-        data: heatmapData,
-      });
+    return () => {
+      map.removeLayer(heatLayer);
+    };
+  }, [data, map]);
 
-      heatmap.setMap(mapRef.current);
-    }
-  }, [isLoaded, data]);
+  return null;
+};
 
+const GeografisHeatmap = ({ data, center, zoom, style }) => {
   return (
-    isLoaded ? (
-      <GoogleMap
-        onLoad={map => (mapRef.current = map)}
-        center={center}
-        zoom={zoom}
-        mapContainerStyle={style}
+    <MapContainer center={center} zoom={zoom} style={style}>
+      <TileLayer
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
-    ) : null
+      <HeatmapLayer data={data} />
+    </MapContainer>
   );
 };
 

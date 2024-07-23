@@ -43,6 +43,16 @@ const siswaSchema = new Schema({
         type: Number,
         required: true
     },
+    lokasi:{
+        type: {
+            type: String,
+            enum: ['Point'],
+            default: 'Point'
+          },
+          coordinates: {
+            type: [Number],
+          },
+    },
     orangtua: {
         ayah: {
             nama: {

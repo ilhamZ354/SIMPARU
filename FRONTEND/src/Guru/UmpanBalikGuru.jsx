@@ -60,10 +60,10 @@ const UmpanBalikGuru = () => {
     const handleDeleteSaran = async (id) => {
         try {
             await deleteSaran(id);
-            alert('Berhasil menghapus keputusan!');
+            alert('Berhasil menghapus saran!');
         } catch (error) {
             alert('Keputusan gagal di hapus!')
-            console.error('Error deleting keputusan:', error);
+            console.error('Error deleting saran:', error);
         }
     };
 

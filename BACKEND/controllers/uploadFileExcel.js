@@ -36,6 +36,20 @@ const excelUpload = async (req, res) => {
     for (const item of newData) {
       const alamat = item.ALAMAT+', '+item.KECAMATAN+', '+item.KABUPATEN+', '+item.PROVINSI;
 
+      const bagiAlamat = alamat.split(', ');
+      const updateAlamat = bagiAlamat.slice(1).join(', ');
+
+      // Cek apakah alamat yang sama sudah ada di database
+      const cari = new RegExp(updateAlamat, 'i');
+      let hasAlamat = await Siswa.findOne({ alamat_lengkap: cari });
+      
+      if (!hasAlamat) {
+          lokasiSiswa = await geocodeAddress(updateAlamat);
+      } else {
+          console.log('alamat siswa sudah ada, tidak perlu panggil API')
+          lokasiSiswa = hasAlamat.lokasi;
+      }
+
       const siswa = new Siswa({
         nama: item.NAMA,
         nisn: item.NISN,
@@ -47,6 +61,7 @@ const excelUpload = async (req, res) => {
         agama: item.AGAMA,
         tahun: item.ANGKATAN,
         alamat_lengkap: alamat,
+        lokasi: lokasiSiswa,
         orangtua: {
           ayah: {
             nama: item.NAMA_AYAH,

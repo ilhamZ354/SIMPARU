@@ -88,7 +88,6 @@ const Siswa = () => {
                                 <Column field="no" header="No" body={nomorKolom}></Column>
                                 <Column field="nama" header="Nama"  style={{minWidth:'15vw'}}></Column>
                                 <Column field="nisn" header="NISN" style={{minWidth:'15vw'}}></Column>
-                                <Column field="nipd" header="NIPD" style={{minWidth:'15vw'}}></Column>
                                 <Column field="jenis_kelamin" header="Jenis Kelamin" style={{minWidth:'10vw'}}></Column>
                                 <Column field="tempat_lahir" header="Tempat lahir" style={{minWidth:'15vw'}}></Column>
                                 <Column field="tanggal_lahir" header="Tanggal lahir" body={(rowData) => formatTanggal(rowData.tanggal_lahir)} style={{ minWidth: '15vw' }}></Column>

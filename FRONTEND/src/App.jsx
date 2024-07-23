@@ -47,9 +47,9 @@ function App() {
   const umpanBalikAdmin = <UmpanBalik/>
   const dashboardOwner = <DashboardKepsek siswaData={siswaData}/>
   const umpanBalikKepsek = <UmpanBalikKepsek/>
-  const geoSiswaOwner = <GeografisSiswaKepsek/>
-  const sekolahKepsek = <SekolahKepsek/>
-  const geoSekolahOwner = <GeografisSekolahOwner/>
+  const geoSiswaOwner = <GeografisSiswaKepsek siswaData={siswaData}/>
+  const sekolahKepsek = <SekolahKepsek siswaData={siswaData}/>
+  const geoSekolahOwner = <GeografisSekolahOwner siswaData={siswaData}/>
   const dashboardUser = <DashboardGuru siswaData={siswaData}/>
   const siswaGuru = <SiswaGuru/>
   const geoSiswaGuru = <GeografisSiswaGuru/>
@@ -81,10 +81,10 @@ function App() {
         {/* Kepala sekolah */}
         <Route path="/kepala-sekolah/dashboard" element={<Pages setSiswaData={setSiswaData} active="dashboard" title="kepala-sekolah" page={dashboardOwner} />} />
         <Route path="/kepala-sekolah/umpan-balik" element={<Pages active="umpanbalik" title="kepala-sekolah" page={umpanBalikKepsek} />} />
-        <Route path="/kepala-sekolah/siswa" element={<Pages setSiswaData={setSiswaData}siswaData={siswaData} active="siswa" title="kepala-sekolah" page={siswaKepsek} />} />
-        <Route path="/kepala-sekolah/geografis-siswa" element={<Pages active="geografis-siswa" title="kepala-sekolah" page={geoSiswaOwner} />} />
-        <Route path="/kepala-sekolah/sekolah" element={<Pages active="sekolah" title="kepala-sekolah" page={sekolahKepsek} />} />
-        <Route path="/kepala-sekolah/geografis-sekolah" element={<Pages active="geografis-sekolah" title="kepala-sekolah" page={geoSekolahOwner} />} />
+        <Route path="/kepala-sekolah/siswa" element={<Pages setSiswaData={setSiswaData} active="siswa" title="kepala-sekolah" page={siswaKepsek} />} />
+        <Route path="/kepala-sekolah/geografis-siswa" element={<Pages setSiswaData={setSiswaData} active="geografis-siswa" title="kepala-sekolah" page={geoSiswaOwner} />} />
+        <Route path="/kepala-sekolah/sekolah" element={<Pages  active="sekolah" title="kepala-sekolah" page={sekolahKepsek} />} />
+        <Route path="/kepala-sekolah/geografis-sekolah" element={<Pages setSiswaData={setSiswaData} active="geografis-sekolah" title="kepala-sekolah" page={geoSekolahOwner} />} />
 
         {/* guru */}
          <Route path="/dashboard" element={<Pages setSiswaData={setSiswaData} active="dashboard" title="guru" page={dashboardUser} />} />

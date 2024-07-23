@@ -124,9 +124,11 @@ const DropdownProfile = () =>{
                 window.location.reload()
             }else{
                 console.log('terjadi kesalahan pada gambar')
+                alert('Tidak dapat melakukan perubahan!')
             }
             } catch (error) {
             console.error('Error uploading file:', error);
+            alert('Tidak dapat melakukan perubahan!')
             }
         };
 

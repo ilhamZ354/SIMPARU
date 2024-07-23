@@ -13,6 +13,9 @@ const getDataSiswa = async (req, res) => {
       .populate('rombel')
       .populate('sekolahAsal');
   
+      const dataGrafikSiswa = await Siswa.find({ tahun: currentYear })
+      .select('lokasi.coordinates')
+
       const previousSiswaData = await Siswa.find({ tahun: previousYear });
 
       const totalSiswa = siswaData.length+previousSiswaData.length;
@@ -58,6 +61,28 @@ const getDataSiswa = async (req, res) => {
         return count;
       }, {});
 
+      const dataGeoSekolah = siswaData.reduce((count, siswa) => {
+        const lokasi = siswa.sekolahAsal.lokasi.coordinates;
+        const nama = siswa.sekolahAsal.nama_sekolah;
+      
+        const key = JSON.stringify(lokasi);
+      
+        if (!count[key]) {
+          count[key] = { nama, count: 0 };
+        }
+        
+        count[key].count += 1;
+        
+        return count;
+      }, {});
+
+      const sekolahCount = siswaData.reduce((count, siswa) => {
+        let sekolah = siswa.sekolahAsal.nama_sekolah;
+
+        count[sekolah] = (count[sekolah] || 0) + 1;
+        return count;
+      }, {})
+
       const dataAlamat = siswaData.reduce((count, siswa) => {
         let alamat = siswa.alamat_lengkap;
 
@@ -87,7 +112,47 @@ const getDataSiswa = async (req, res) => {
           const siswaTahun = await Siswa.countDocuments({ tahun: i });
           dataSiswaBaru[i] = siswaTahun;
       }
-      
+
+      const jenisSekolahCount = siswaData.reduce((count, siswa) => {
+        let sekolah = siswa.sekolahAsal.nama_sekolah;
+        let jenisSekolah = '';
+    
+        if (sekolah.includes('SMP')) {
+          if (sekolah.includes('Negeri') || sekolah.includes('SMP N')) {
+            jenisSekolah = 'SMPN';
+          } else if (sekolah.includes('IT')) {
+            jenisSekolah = 'SMP IT';
+          } else if (sekolah.includes('Swasta') || sekolah.includes('S')) {
+            jenisSekolah = 'SMPS';
+          } else {
+            jenisSekolah = sekolah
+          }
+
+        } else if (sekolah.includes('MTs') || sekolah.includes('MTS')) {
+          if (sekolah.includes('Negeri') || sekolah.includes('N')) {
+            jenisSekolah = 'MTsN';
+          } else {
+            jenisSekolah = 'MTsS';
+          } 
+        } else {
+          jenisSekolah = 'PONTREN';
+        }
+    
+        count[jenisSekolah] = (count[jenisSekolah] || 0) + 1;
+        return count;
+      }, {});
+
+      let sortSekolah = [];
+      for (let jenis in jenisSekolahCount) {
+        sortSekolah.push([jenis, jenisSekolahCount[jenis]]);
+      }
+      sortSekolah.sort((a, b) => b[1] - a[1]);
+
+      let sortedJenisSekolah = {};
+      sortSekolah.forEach(item => {
+        sortedJenisSekolah[item[0]] = item[1];
+      });
+
       res.json({
         status: true,
         totalSiswa,
@@ -99,7 +164,11 @@ const getDataSiswa = async (req, res) => {
         rata_rata_nilai: Math.round(rataRataNilai),
         jurusanCount,
         dataAlamat: sortedDataAlamat,
-        dataSiswaBaru
+        dataSiswaBaru,
+        dataGrafikSiswa,
+        sekolahCount,
+        jenisSekolahCount: sortedJenisSekolah,
+        dataGeoSekolah
       });
     } catch (error) {
       console.error('Error fetching dashboard data:', error);

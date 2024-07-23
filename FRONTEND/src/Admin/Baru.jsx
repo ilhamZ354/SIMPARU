@@ -65,7 +65,7 @@ const Baru = () => {
                     id="file-input"
                   />
                   {selectedFile && (
-                    <span className="text-md font-sans text-green-600 bg-white">{selectedFile.name}</span>
+                    <span className="text-md font-sans text-green-600 bg-white p-2">{selectedFile.name}</span>
                   )}
                   <label htmlFor="file-input">
                     <Button 

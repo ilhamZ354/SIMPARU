@@ -251,7 +251,7 @@ const Admin = () => {
                     <div className="flex w-full" style={{width:"60vw", height:"3vw"}}>
                         <Button label="Input Admin" className="p-button-info shadow-lg" icon="pi pi-plus" onClick={()=>{setNewAdmin(true)}}></Button>
                         <Dialog 
-                            header="Input User" 
+                            header="Input Admin" 
                             visible={newAdmin} 
                             style={{ width: '25vw', minWidth: '10rem' }} 
                             onHide={() => { if (!newAdmin) return; setNewAdmin(false); }}

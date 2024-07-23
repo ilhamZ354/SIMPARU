@@ -113,7 +113,7 @@ const Kepsek = () => {
                         onClick={deleteKepsek}
                     ></Button>
                     <Dialog
-                        header="Edit Admin"
+                        header="Edit Kepala Sekolah"
                         visible={editKepsek}
                         style={{ width: '25vw', minWidth: '10rem' }}
                         onHide={() => setEditKepsek(false)}
@@ -224,7 +224,7 @@ const Kepsek = () => {
                             disabled={dataKepsek.users.length > 0}
                         ></Button>
                         <Dialog
-                            header="Input User"
+                            header="Input Kepala Sekolah"
                             visible={newKepsek}
                             style={{ width: '25vw', minWidth: '10rem' }}
                             onHide={() => setNewKepsek(false)}
