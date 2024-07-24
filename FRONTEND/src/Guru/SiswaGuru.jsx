@@ -9,9 +9,15 @@ import PieOption from "../components/charts/PieOption";
 import BarOption7 from "../components/charts/BarOption7";
 import { siswas } from "../services/siswa.service";
 
-const SiswaGuru = () => {
+const SiswaGuru = ({ siswaData }) => {
     const [dataSiswa, setDataSiswa] = useState();
 
+    console.log(siswaData)
+
+    const defaultData = { };
+    const dataJurusan = siswaData.jurusanCount ? siswaData.jurusanCount : defaultData;
+    const siswaAlamat = siswaData.dataAlamat ? siswaData.dataAlamat : defaultData;
+    
     useEffect(() => {
         const fetchSiswas = async () => {
             try {
@@ -28,8 +34,8 @@ const SiswaGuru = () => {
     
 
     const dataAlamat = {
-        data: [ 80, 20, 30, 65,50,33,12, 30],
-        kategori: ['Kisaran timur','Kisaran barat','Pulo Bandring', 'Rawang Panca Arga', 'Air joman', 'Meranti', 'Pulo raja', 'Tanjungbalai', ]
+        data: Object.values(siswaAlamat),
+        kategori: Object.keys(siswaAlamat),
     };
 
     const nomorKolom = (rowData, column) => {
@@ -51,6 +57,7 @@ const SiswaGuru = () => {
                                     <div className="flex flex-col">
                                     <span className='text-white font-sans text-xs ml-3 mt-2'>Grafik jurusan semua siswa</span>
                                         <PieOption
+                                        data={dataJurusan}
                                         style={{marginTop:'5px'}}
                                     />
                                     </div>
@@ -102,5 +109,6 @@ const SiswaGuru = () => {
         </div>
     );
 };
+
 
 export default SiswaGuru;

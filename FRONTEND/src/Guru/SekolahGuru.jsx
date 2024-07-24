@@ -9,10 +9,15 @@ import Bar from "../components/charts/Bar";
 import BarOption7 from "../components/charts/BarOption7";
 import { getSekolahAsal } from "../services/sekolah.services";
 
-const SekolahGuru = () =>{
+const SekolahGuru = ({ siswaData }) =>{
     const [globalFilter, setGlobalFilter] = useState('');
     const [selectedSekolah, setSelectedSekolah] = useState(null);
     const [dataSekolah, setDataSekolah] = useState();
+
+    console.log(siswaData)
+    const defaultData = { };
+    const grafikSekolah = siswaData.sekolahCount ? siswaData.sekolahCount : defaultData;
+    const grafikJenisSekolah = siswaData.jenisSekolahCount ? siswaData.jenisSekolahCount : defaultData;
 
     useEffect(() => {
         const fetchSekolas = async () => {
@@ -32,83 +37,11 @@ const SekolahGuru = () =>{
         return column.rowIndex + 1;
     };
 
-    const sekolah = [
-        {
-            "no":1,
-            'name': 'SMP Negeri 1 kisaran',
-            'alamat': 'Kisaran Timur',
-            'email': '@smpn1kisaran',
-            'total':'12',
-        },
-        {
-            "no":2,
-            'name': 'SMP Negeri 2 kisaran',
-            'alamat': 'Kisaran Barat',
-            'email': '@smpn2kisaran',
-            'total':'22',
-        },
-        {
-            "no":3,
-            'name': 'SMP Muhammadiyah 22 kisaran',
-            'alamat': 'Kisaran Timur',
-            'email': '@smpnm22kisaran',
-            'total':'30',
-        },
-        {
-            "no":4,
-            'name': 'SMP Alwashliyah 10 Meranti',
-            'alamat': 'Meranti',
-            'email': 'smpalwashliyah10meranti@yahoo.com',
-            'total':'4',
-        },
-        {
-            "no":5,
-            'name': 'SMP Negeri 5 Kisaran',
-            'alamat': 'Kisaran',
-            'email': 'smpn5kis@yahoo.co.id',
-            'total':'6',
-        },
-        {
-            "no":6,
-            'name': 'SMP Daerah Air joman',
-            'alamat': 'Kisaran',
-            'email': 'smpn5kis@yahoo.co.id',
-            'total':'6',
-        },
-        {
-            "no":7,
-            'name': 'SMP Kesatuan Meranti',
-            'alamat': 'Meranti',
-            'email': 'kesatuan_smp@yahoo.co.id',
-            'total': '3',
-        },
-        {
-            "no":8,
-            'name': 'SMP Kesatuan Meranti',
-            'alamat': 'Meranti',
-            'email': 'kesatuan_smp@yahoo.co.id',
-            'total': '3',
-        },
-        {
-            "no":9,
-            'name': 'SMP S Amal Bakti',
-            'alamat': 'Sei Kamah',
-            'email': 'amalbaktismpswasta@gmail.com',
-            'total': '5',
-        },
-        {
-            "no":10,
-            'name': 'MTS Negeri 1 Asahan',
-            'alamat': 'Rawang Lama',
-            'email': 'mtsn1asahan@gmail',
-            'total': '10',
-        },
-    ]
+    const sekolah = Object.keys(grafikSekolah)
     
-    const jumlah = [45,30,28,25,24,22,20,14,14,9]
-    const sekolahData = sekolah.map((data)=>{ return data.name })
+    const jumlah = Object.values(grafikSekolah)
 
-    const alamatSekolah = { data: jumlah, kategori: sekolahData }
+    const alamatSekolah = { data: jumlah, kategori: sekolah }
 
     const rightContents = (
         <div className="flex justify-end w-full">
@@ -137,8 +70,8 @@ const SekolahGuru = () =>{
                             <div className="flex flex-col">
                                 <span className="flex w-full text-white ml-4 mt-2 text-xs">Grafik pembagian asal sekolah</span>
                                 <Bar
-                                    data={['SMPN', 'SMPS', 'MTSN', 'MTSN', 'PONTREN', 'SMP IT']}
-                                    dataValue={[230, 200, 110, 90, 50, 28]}
+                                    data={Object.keys(grafikJenisSekolah)}
+                                    dataValue={Object.values(grafikJenisSekolah)}
                                     theme='dark'
                                     style={{ height: "300px", marginTop: "6px", marginBottom: "5px" }}
                                 />
@@ -171,15 +104,14 @@ const SekolahGuru = () =>{
                                 selection={selectedSekolah}
                                 onSelectionChange={(e) => setSelectedSekolah(e.value)}
                                 dataKey="id"
-                                rows={10}
+                                rows={20}
                                 paginator 
                                 paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
                                 currentPageReportTemplate="{first} to {last} of {totalRecords}" paginatorLeft={paginatorLeft} paginatorRight={paginatorRight}
                                 scrollable scrollHeight="flex" tableStyle={{ minWidth: '100%' }}>
                                     <Column field="no" header="No" body={nomorKolom} sortable style={{maxWidth:'3rem'}}></Column>
-                                    <Column field="nama_sekolah" header="Nama" style={{minWidth:'8rem'}}></Column>
+                                    <Column field="nama_sekolah" header="Nama" style={{minWidth:'10rem'}}></Column>
                                     <Column field="alamat_sekolah" header="Alamat" style={{minWidth:'12rem'}}></Column>
-                                    <Column field="email" header="Email" style={{minWidth:'13rem'}}></Column>
                                     <Column field="total_siswa" header="Total" sortable style={{maxWidth:'6rem'}}></Column>
                                 </DataTable>
                             </div>

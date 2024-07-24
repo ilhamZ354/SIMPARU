@@ -41,6 +41,7 @@ const { upload } = require('../config/middleware');
 const { getDataSiswa } = require('../controllers/dataSiswaController');
 const { createSaran, getAllSarans, getSaranMe, updateSaranById, deleteSaranById } = require('../controllers/saranController');
 const { createKeputusan, getAllKeputusan, getKeputusanById, updateKeputusanById, deleteKeputusanById } = require('../controllers/keputusanController');
+const { getDataPerJurusan } = require('../controllers/dataJurusan');
 
 const BASE_URL = '/api/simparu'
 
@@ -52,7 +53,8 @@ module.exports = (app) => {
     app.get(`${BASE_URL}/user/me`, verify, getProfile );
     app.patch(`${BASE_URL}/password/me`, verify, editPassword );
 
-    app.get(`${BASE_URL}/datasiswa/:tahun`, getDataSiswa )
+    app.get(`${BASE_URL}/datasiswa/:tahun`, verify, getDataSiswa )
+    app.get(`${BASE_URL}/jurusan-tiap-tahun.json`, verify, getDataPerJurusan )
     
     //hanya super admin
     // app.post(`${BASE_URL}/super-admin/regis`, regisSuperAdmin)

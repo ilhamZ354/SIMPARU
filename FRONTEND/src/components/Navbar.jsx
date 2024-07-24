@@ -4,6 +4,7 @@ import PhotoProfile from '../../../BACKEND/uploads/images/profil-image2.jpg';
 import DropdownProfile from "../components/DropdownProfile";
 import styled from 'styled-components';
 import { Dropdown } from 'primereact/dropdown';
+import Cookies from 'js-cookie';
 
 const ProfileImage = styled.img`
   width: 35px;
@@ -33,7 +34,13 @@ const Navbar = ({ setSiswaData }) => {
     const fetchDefaultYearData = async () => {
       try {
         const yearToFetch = selectedTahun ? selectedTahun.name : tahun[3].name; 
-        const response = await fetch(`http://localhost:5000/api/simparu/datasiswa/${yearToFetch}`);
+        const accessToken = Cookies.get('access_token');
+        const response = await fetch(`http://localhost:5000/api/simparu/datasiswa/${yearToFetch}`, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
         
         if (!response.ok) {
           throw new Error('Network response was not ok');

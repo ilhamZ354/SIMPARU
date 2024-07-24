@@ -1,7 +1,7 @@
 import {BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Login from "./Login";
 import Pages from './components/Page';
-
+import ProtectedRoute from './protectedRoute.jsx';
 // admin
 import DashboardAdmin from './Admin/Dashboard';
 import Baru from './Admin/Baru';
@@ -22,7 +22,7 @@ import UmpanBalikGuru from './Guru/UmpanBalikGuru.jsx';
 import GeografisSekolahGuru from './Guru/GeografisSekolahGuru.jsx';
 import SekolahGuru from './Guru/SekolahGuru.jsx';
 import SiswaGuru from './Guru/SiswaGuru.jsx';
-import GeografisSiswaGuru from './Guru/GeografisSekolahGuru.jsx';
+import GeografisSiswaGuru from './Guru/GeografisSiswaGuru.jsx';
 
 // super admin
 import Kepsek from './SuperAdmin/Kepsek.jsx';
@@ -51,10 +51,10 @@ function App() {
   const sekolahKepsek = <SekolahKepsek siswaData={siswaData}/>
   const geoSekolahOwner = <GeografisSekolahOwner siswaData={siswaData}/>
   const dashboardUser = <DashboardGuru siswaData={siswaData}/>
-  const siswaGuru = <SiswaGuru/>
-  const geoSiswaGuru = <GeografisSiswaGuru/>
-  const sekolahGuru = <SekolahGuru/>
-  const geoSekolahGuru = <GeografisSekolahGuru/>
+  const siswaGuru = <SiswaGuru siswaData={siswaData}/>
+  const geoSiswaGuru = <GeografisSiswaGuru siswaData={siswaData}/>
+  const sekolahGuru = <SekolahGuru siswaData={siswaData}/>
+  const geoSekolahGuru = <GeografisSekolahGuru siswaData={siswaData}/>
   const umpanBalikGuru = <UmpanBalikGuru/>
   const dashboardSuperAdmin = <DashboardSuperAdmin siswaData={siswaData} />
   const kepsek = <Kepsek/>
@@ -67,32 +67,32 @@ function App() {
         <Route path="/" element={<Login />} />
 
         {/* super admin */}
-        <Route path="/super-admin/dashboard" element={<Pages setSiswaData={setSiswaData} title="super-admin" active='dashboard' page={dashboardSuperAdmin} />} />
-        <Route path="/super-admin/kepsek" element={<Pages title="super-admin" active='kepsek' page={kepsek} />} />
-        <Route path="/super-admin/admin" element={<Pages title="super-admin" active='admin' page={admin} />} />
-        <Route path="/super-admin/guru" element={<Pages title="super-admin" active='guru' page={guru} />} />
+        <Route path="/super-admin/dashboard" element={<ProtectedRoute><Pages setSiswaData={setSiswaData} title="super-admin" active='dashboard' page={dashboardSuperAdmin} /></ProtectedRoute>} />
+        <Route path="/super-admin/kepsek" element={<ProtectedRoute><Pages title="super-admin" active='kepsek' page={kepsek} /></ProtectedRoute>} />
+        <Route path="/super-admin/admin" element={<ProtectedRoute><Pages title="super-admin" active='admin' page={admin} /></ProtectedRoute>} />
+        <Route path="/super-admin/guru" element={<ProtectedRoute><Pages title="super-admin" active='guru' page={guru} /></ProtectedRoute>} />
 
         {/* admin */}
-        <Route path="/admin/dashboard" element={<Pages setSiswaData={setSiswaData} title="admin" active='dashboard' page={dashboardAdmin} />} />
-        <Route path="/admin/siswa-baru" element={<Pages active="baru" title="admin" page={siswabaru} />} />
-        <Route path="/admin/siswa" element={<Pages active="siswa" title="admin" page={siswa} />} />
-        <Route path="/admin/umpan-balik" element={<Pages active="umpanbalik" title="admin" page={umpanBalikAdmin} />} />
+        <Route path="/admin/dashboard" element={<ProtectedRoute><Pages setSiswaData={setSiswaData} title="admin" active='dashboard' page={dashboardAdmin} /></ProtectedRoute>} />
+        <Route path="/admin/siswa-baru" element={<ProtectedRoute><Pages active="baru" title="admin" page={siswabaru} /></ProtectedRoute>} />
+        <Route path="/admin/siswa" element={<ProtectedRoute><Pages active="siswa" title="admin" page={siswa} /></ProtectedRoute>} />
+        <Route path="/admin/umpan-balik" element={<ProtectedRoute><Pages active="umpanbalik" title="admin" page={umpanBalikAdmin} /></ProtectedRoute>} />
 
         {/* Kepala sekolah */}
-        <Route path="/kepala-sekolah/dashboard" element={<Pages setSiswaData={setSiswaData} active="dashboard" title="kepala-sekolah" page={dashboardOwner} />} />
-        <Route path="/kepala-sekolah/umpan-balik" element={<Pages active="umpanbalik" title="kepala-sekolah" page={umpanBalikKepsek} />} />
-        <Route path="/kepala-sekolah/siswa" element={<Pages setSiswaData={setSiswaData} active="siswa" title="kepala-sekolah" page={siswaKepsek} />} />
-        <Route path="/kepala-sekolah/geografis-siswa" element={<Pages setSiswaData={setSiswaData} active="geografis-siswa" title="kepala-sekolah" page={geoSiswaOwner} />} />
-        <Route path="/kepala-sekolah/sekolah" element={<Pages  active="sekolah" title="kepala-sekolah" page={sekolahKepsek} />} />
-        <Route path="/kepala-sekolah/geografis-sekolah" element={<Pages setSiswaData={setSiswaData} active="geografis-sekolah" title="kepala-sekolah" page={geoSekolahOwner} />} />
+        <Route path="/kepala-sekolah/dashboard" element={<ProtectedRoute><Pages setSiswaData={setSiswaData} active="dashboard" title="kepala-sekolah" page={dashboardOwner} /></ProtectedRoute>} />
+        <Route path="/kepala-sekolah/umpan-balik" element={<ProtectedRoute><Pages active="umpanbalik" title="kepala-sekolah" page={umpanBalikKepsek} /></ProtectedRoute>} />
+        <Route path="/kepala-sekolah/siswa" element={<ProtectedRoute><Pages setSiswaData={setSiswaData} active="siswa" title="kepala-sekolah" page={siswaKepsek} /></ProtectedRoute>} />
+        <Route path="/kepala-sekolah/geografis-siswa" element={<ProtectedRoute><Pages setSiswaData={setSiswaData} active="geografis-siswa" title="kepala-sekolah" page={geoSiswaOwner} /></ProtectedRoute>} />
+        <Route path="/kepala-sekolah/sekolah" element={<ProtectedRoute><Pages active="sekolah" title="kepala-sekolah" page={sekolahKepsek} /></ProtectedRoute>} />
+        <Route path="/kepala-sekolah/geografis-sekolah" element={<ProtectedRoute><Pages setSiswaData={setSiswaData} active="geografis-sekolah" title="kepala-sekolah" page={geoSekolahOwner} /></ProtectedRoute>} />
 
         {/* guru */}
-         <Route path="/dashboard" element={<Pages setSiswaData={setSiswaData} active="dashboard" title="guru" page={dashboardUser} />} />
-         <Route path="/umpan-balik" element={<Pages active="umpanbalik" title="guru" page={umpanBalikGuru} />} />
-        <Route path="/siswa" element={<Pages active="siswa" title="guru" page={siswaGuru} />} />
-        <Route path="/geografis-siswa" element={<Pages active="geografis-siswa" title="guru" page={geoSiswaGuru} />} />
-        <Route path="/sekolah" element={<Pages active="sekolah" title="guru" page={sekolahGuru} />} />
-        <Route path="/geografis-sekolah" element={<Pages active="geografis-sekolah" title="guru" page={geoSekolahGuru} />} />
+        <Route path="/dashboard" element={<ProtectedRoute><Pages setSiswaData={setSiswaData} active="dashboard" title="guru" page={dashboardUser} /></ProtectedRoute>} />
+        <Route path="/umpan-balik" element={<ProtectedRoute><Pages active="umpanbalik" title="guru" page={umpanBalikGuru} /></ProtectedRoute>} />
+        <Route path="/siswa" element={<ProtectedRoute><Pages setSiswaData={setSiswaData} active="siswa" title="guru" page={siswaGuru} /></ProtectedRoute>} />
+        <Route path="/geografis-siswa" element={<ProtectedRoute><Pages setSiswaData={setSiswaData} active="geografis-siswa" title="guru" page={geoSiswaGuru} /></ProtectedRoute>} />
+        <Route path="/sekolah" element={<ProtectedRoute><Pages setSiswaData={setSiswaData} active="sekolah" title="guru" page={sekolahGuru} /></ProtectedRoute>} />
+        <Route path="/geografis-sekolah" element={<ProtectedRoute><Pages setSiswaData={setSiswaData} active="geografis-sekolah" title="guru" page={geoSekolahGuru} /></ProtectedRoute>} />
       </Routes>
     </Router>
   );
