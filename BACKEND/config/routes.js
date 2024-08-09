@@ -42,6 +42,7 @@ const { getDataSiswa } = require('../controllers/dataSiswaController');
 const { createSaran, getAllSarans, getSaranMe, updateSaranById, deleteSaranById } = require('../controllers/saranController');
 const { createKeputusan, getAllKeputusan, getKeputusanById, updateKeputusanById, deleteKeputusanById } = require('../controllers/keputusanController');
 const { getDataPerJurusan } = require('../controllers/dataJurusan');
+const { getRecommendation, generateRekomendasi } = require('../controllers/recomDecision');
 
 const BASE_URL = '/api/simparu'
 
@@ -63,11 +64,13 @@ module.exports = (app) => {
     app.delete(`${BASE_URL}/kepsek/hapus`, verifySuperAdmin, deleteKepsek );
     app.patch(`${BASE_URL}/kepsek/edit/:id`,verifySuperAdmin, editKepsek );
 
+    //kepala sekolah
     app.post(`${BASE_URL}/keputusan/buat`, verifyKepsek, createKeputusan );
     app.get(`${BASE_URL}/keputusans`, verifyAdminKepsekGuru, getAllKeputusan );
     app.get(`${BASE_URL}/keputusan/:id`, verifyAdminKepsekGuru, getKeputusanById );
     app.patch(`${BASE_URL}/keputusan/update/:id`, verifyKepsek, updateKeputusanById );
     app.delete(`${BASE_URL}/keputusan/delete/:id`, verifyKepsek, deleteKeputusanById );
+    app.get(`${BASE_URL}/rekomendasi/:tahun`,verifyKepsek, generateRekomendasi );
 
     app.post(`${BASE_URL}/admin/regis`, verifySuperAdmin, regisAdmin );
     app.get(`${BASE_URL}/admins`, verifySuperAdmin, getAdmins );

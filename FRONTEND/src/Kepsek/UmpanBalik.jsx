@@ -7,14 +7,16 @@ import { Dialog } from 'primereact/dialog';
 import { Dropdown } from 'primereact/dropdown';
 import axios from 'axios';
 import FormKeputusan from "../components/KeputusanForm";
+import RekomenKeputusan from "../components/RekomeKeputusan";
 import { getSarans } from "../services/umpanBalik.services";
 import Cookies from 'js-cookie';
-import { buatKeputusan, getAllKeputusan, deleteKeputusan } from "../services/keputusan.services";
+import { getAllKeputusan, deleteKeputusan } from "../services/keputusan.services";
 
 const UmpanBalikKepsek = () => {
     const [dataSaran, setDataSaran] = useState([]);
     const [buatKeputusanDialog, setBuatKeputusanDialog] = useState(false);
     const [dataKeputusan, setDataKeputusan] = useState([]);
+    const [lihatRekomendasi, setLihatRekomendasi] = useState(false);
 
     useEffect(() => {
         fetchKeputusan();
@@ -103,9 +105,17 @@ const UmpanBalikKepsek = () => {
         setBuatKeputusanDialog(true);
     };
 
+    const showRekomendasiDialog = () => {
+        setLihatRekomendasi(true)
+    }
+
     const hideBuatKeputusanDialog = () => {
         setBuatKeputusanDialog(false);
     };
+
+    const hideRekomendasiDialog = () => {
+        setLihatRekomendasi(false);
+    }
 
     const handleDeleteKeputusan = async (id) => {
         try {
@@ -146,6 +156,15 @@ const UmpanBalikKepsek = () => {
                             onHide={hideBuatKeputusanDialog}
                         >
                             <FormKeputusan onClose={hideBuatKeputusanDialog} onSuccess={fetchKeputusan} />
+                        </Dialog>
+                        <Button label="Lihat Rekomendasi" className="p-button-success shadow-lg ml-2" onClick={showRekomendasiDialog}></Button>
+                        <Dialog
+                            header="Rekomendasi Keputusan"
+                            visible={lihatRekomendasi}
+                            style={{width: '45vw', minWidth: '20rem'}}
+                            onHide={hideRekomendasiDialog}
+                            >
+                            <RekomenKeputusan onClose={hideRekomendasiDialog}/>
                         </Dialog>
                         </div>
                     </div>

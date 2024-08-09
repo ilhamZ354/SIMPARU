@@ -9,6 +9,7 @@ const siswaSchema = new Schema({
     },
     nisn: {
         type: String,
+        unique: true
     },
     jenis_kelamin: {
         type: String,

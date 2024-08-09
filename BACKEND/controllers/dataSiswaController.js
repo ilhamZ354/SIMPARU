@@ -18,7 +18,7 @@ const getDataSiswa = async (req, res) => {
 
       const previousSiswaData = await Siswa.find({ tahun: previousYear });
 
-      const totalSiswa = siswaData.length+previousSiswaData.length;
+      const totalSiswa = siswaData.length;
       const totalSiswaPreviousYear = previousSiswaData.length;
 
       let totalKenaikan = 0;
@@ -88,8 +88,6 @@ const getDataSiswa = async (req, res) => {
 
         let result = alamat.split(", ");
         let alamatSiswa = result[1];
-
-        // console.log(alamatSiswa)
         
         count[alamatSiswa] = (count[alamatSiswa] || 0) + 1;
         return count;
@@ -152,6 +150,7 @@ const getDataSiswa = async (req, res) => {
       sortSekolah.forEach(item => {
         sortedJenisSekolah[item[0]] = item[1];
       });
+
 
       res.json({
         status: true,

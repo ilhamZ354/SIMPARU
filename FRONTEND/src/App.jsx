@@ -83,7 +83,7 @@ function App() {
         <Route path="/kepala-sekolah/umpan-balik" element={<ProtectedRoute><Pages active="umpanbalik" title="kepala-sekolah" page={umpanBalikKepsek} /></ProtectedRoute>} />
         <Route path="/kepala-sekolah/siswa" element={<ProtectedRoute><Pages setSiswaData={setSiswaData} active="siswa" title="kepala-sekolah" page={siswaKepsek} /></ProtectedRoute>} />
         <Route path="/kepala-sekolah/geografis-siswa" element={<ProtectedRoute><Pages setSiswaData={setSiswaData} active="geografis-siswa" title="kepala-sekolah" page={geoSiswaOwner} /></ProtectedRoute>} />
-        <Route path="/kepala-sekolah/sekolah" element={<ProtectedRoute><Pages active="sekolah" title="kepala-sekolah" page={sekolahKepsek} /></ProtectedRoute>} />
+        <Route path="/kepala-sekolah/sekolah" element={<ProtectedRoute><Pages setSiswaData={setSiswaData} active="sekolah" title="kepala-sekolah" page={sekolahKepsek} /></ProtectedRoute>} />
         <Route path="/kepala-sekolah/geografis-sekolah" element={<ProtectedRoute><Pages setSiswaData={setSiswaData} active="geografis-sekolah" title="kepala-sekolah" page={geoSekolahOwner} /></ProtectedRoute>} />
 
         {/* guru */}
